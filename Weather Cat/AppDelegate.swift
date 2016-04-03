@@ -25,21 +25,33 @@ let forecastIOClient = APIClient(apiKey: "480b791a0bd0965a07bc7b19c4b901e7")
 //  }
 //}
 
-class CoreLocationController : NSObject, CLLocationManagerDelegate {
-
-}
-
+//class CoreLocationController : NSObject, CLLocationManagerDelegate {
+//  var locationManager:CLLocationManager = CLLocationManager()
+//
+//  override init() {
+//    super.init()
+//    self.locationManager.delegate = self
+//    locationManager.requestAlwaysAuthorization()
+//  }
+//}
+//
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate {
-
+class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-2)
-  var location = ""
+
+  let locationManager = CLLocationManager()
+  var latitude = Double()
+  var longitude = Double()
+
+//  var coreLocationController:CoreLocationController?
+//  var location = ""
 
   func applicationDidFinishLaunching(aNotification: NSNotification) {
+//    self.coreLocationController = CoreLocationController()
     if let button = statusItem.button {
       button.image = NSImage(named: "StatusBarButtonImage")
-      // button.action = getWeather (?)
+//      button.action = #selector(AppDelegate.updateLocation(_:))
       let menu = NSMenu()
       statusItem.menu = menu
       menu.addItem(NSMenuItem(title: "Print Quote", action: #selector(AppDelegate.printQuote(_:)), keyEquivalent: "P"))
@@ -54,9 +66,56 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //      locationMgr.delegate = geoCoordDelegate
 //      locationMgr.desiredAccuracy = kCLLocationAccuracyBest
 //      locationMgr.startUpdatingLocation()
+//      self.locationManager.delegate = self
+//      self.locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+//      self.locationManager.requestWhenInUseAuthorization()
+//      self.locationManager.startUpdatingLocation()
+//      locationManager.delegate = self
+//      locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+//      locationManager.requestLocation()
+      updateLocation()
+
 
     }
   }
+
+  func updateLocation() {
+    self.locationManager.delegate = self
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+    //self.locationManager.distanceFilter = 10
+//    self.locationManager.requestWhenInUseAuthorization()
+    self.locationManager.startUpdatingLocation()
+  }
+
+  func locationManager(manager: CLLocationManager, didUpdateLocations locations: [AnyObject]) {
+    let location:CLLocation = locations[locations.count-1] as! CLLocation
+    locationManager.stopUpdatingLocation() // Stop Location Manager - keep here to run just once
+//    print(location.coordinate)
+//    print(location.coordinate.latitude)
+    latitude = location.coordinate.latitude
+    longitude = location.coordinate.longitude
+    print(longitude)
+
+//
+//    LatitudeGPS = String(format: "%.6f", manager.location!.coordinate.latitude)
+//    LongitudeGPS = String(format: "%.6f", manager.location!.coordinate.longitude)
+//    print("Latitude - \(LatitudeGPS)")
+
+  }
+
+
+//  func locationManager(manager: CLLocationManager, didUpdateLocations locations: [AnyObject]) {
+//    if let location = locations.first {
+//      print("Current location: \(location)")
+//    } else {
+//      // ...
+//    }
+//  }
+//
+//  func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+//    print("Error finding location: \(error.localizedDescription)")
+//  }
+//
 
   // func getLocation() {
   // }
@@ -65,9 +124,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   // gets current weather for *location
   // }
 
-  func getWeather(latitude: NSNumber, longitude: NSNumber) -> Void {
-    print("location is latitude \(latitude), longitude \(longitude)")
-  }
+//  func getWeather(latitude: NSNumber, longitude: NSNumber) -> Void {
+//    print("location is latitude \(latitude), longitude \(longitude)")
+//  }
 
   func printQuote(sender: AnyObject) {
     let quoteText = "Never put off until tomorrow what you can do the day after tomorrow."
