@@ -98,10 +98,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   }
 
   func updateSunsetTime(currentForecast: Forecast) {
-    let sunsetTime = currentForecast.daily?.data![0].sunsetTime
-    let sunsetTimeString = "🌙 \(NSDateFormatter.localizedStringFromDate(sunsetTime!, dateStyle: NSDateFormatterStyle.NoStyle, timeStyle: NSDateFormatterStyle.ShortStyle))"
+    let sunset = currentForecast.daily?.data![0].sunsetTime
+    let sunsetTime = "🌙 \(NSDateFormatter.localizedStringFromDate(sunset!, dateStyle: NSDateFormatterStyle.NoStyle, timeStyle: NSDateFormatterStyle.ShortStyle))"
     let sunsetTimeMenuItem = self.menu.itemWithTag(self.sunsetTimeMenuItemTag)
-    sunsetTimeMenuItem?.title = sunsetTimeString
+    sunsetTimeMenuItem?.title = sunsetTime
   }
 
   func updateWeatherAlerts(currentForecast: Forecast) {
