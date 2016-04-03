@@ -50,8 +50,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
       if let currentForecast = currentForecast {
         //  We got the current forecast!
         print(currentForecast.currently)
+        let apparentTemperature = Int(round((currentForecast.currently?.apparentTemperature)!))
+        print(apparentTemperature)
       } else if let error = error {
-        //  Uh-oh we have an error!
         print(error)
       }
     }
