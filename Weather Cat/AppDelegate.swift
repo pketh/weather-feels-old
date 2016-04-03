@@ -7,6 +7,28 @@
 //
 
 import Cocoa
+import CoreLocation
+
+import ForecastIO
+
+let forecastIOClient = APIClient(apiKey: "480b791a0bd0965a07bc7b19c4b901e7")
+
+
+//let locationMgr = CLLocationManager()
+//
+//class GeoCordDelegate: NSObject, CLLocationManagerDelegate {
+//  func locationManager(manager: CLLocationManager, didUpdateToLocation newLocation: CLLocation, fromLocation oldLocation: CLLocation) {
+//    print("Updated Location: " + newLocation.description)
+//  }
+//  func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+//    print("Error while updating location " + error.localizedDescription)
+//  }
+//}
+
+class CoreLocationController : NSObject, CLLocationManagerDelegate {
+
+}
+
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -28,6 +50,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       // saves to global var
       // }
       // AppDelegate.getWeather(location) on the hour
+//      let geoCoordDelegate = GeoCordDelegate()
+//      locationMgr.delegate = geoCoordDelegate
+//      locationMgr.desiredAccuracy = kCLLocationAccuracyBest
+//      locationMgr.startUpdatingLocation()
+
     }
   }
 
@@ -38,7 +65,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   // gets current weather for *location
   // }
 
-
+  func getWeather(latitude: NSNumber, longitude: NSNumber) -> Void {
+    print("location is latitude \(latitude), longitude \(longitude)")
+  }
 
   func printQuote(sender: AnyObject) {
     let quoteText = "Never put off until tomorrow what you can do the day after tomorrow."
