@@ -19,12 +19,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   let alertMenuItemTag = 3
 
   func applicationDidFinishLaunching(aNotification: NSNotification) {
+    self.menu.autoenablesItems = false
     if let button = statusItem.button {
       button.image = NSImage(named: "StatusBarButtonImage")
       // button.action = #selector(AppDelegate.updateData(_:))
       statusItem.menu = menu
 
-      let currentApparentTemperatureMenuItem = NSMenuItem(title: "🔮 --°", action: #selector(AppDelegate.printQuote(_:)), keyEquivalent: "P")
+      let currentApparentTemperatureMenuItem = NSMenuItem(title: "🔮 --°", action: Selector(), keyEquivalent: "P")
       currentApparentTemperatureMenuItem.tag = currentApparentTemperatureMenuItemTag
       menu.addItem(currentApparentTemperatureMenuItem)
 
@@ -33,8 +34,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
       // menuitem.indentationLevel: Int -> 0(default) to 15
       // blah
 
-      let sunsetTimeMenuItem = NSMenuItem(title: "🌙 ----", action: #selector(AppDelegate.openAlertInBrowser(_:)), keyEquivalent: "")
+      let sunsetTimeMenuItem = NSMenuItem(title: "🌙 ----", action: Selector(), keyEquivalent: "")
       sunsetTimeMenuItem.tag = sunsetTimeMenuItemTag
+      // disable
+      sunsetTimeMenuItem.enabled = false
       menu.addItem(sunsetTimeMenuItem)
 
       // ----------------
@@ -80,8 +83,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
         currentApparentTemperatureMenuItem?.title = "\(apparentTemperature)°\(weatherUnit)"
 
 //        get weather summary statement for the day 'clear throughout day' - disabled or indented item
-        print(currentForecast.currently?.summary)
-        print(currentForecast.daily)
+//        print(currentForecast.currently?.summary)
+//        print(currentForecast.daily)
 
         self.updateSunsetTime(currentForecast)
 
