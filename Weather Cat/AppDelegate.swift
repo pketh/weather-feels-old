@@ -90,12 +90,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 // w weatherunit
 
         self.updateWeatherAlerts(currentForecast)
-
       } else if let error = error {
         print(error)
       }
     }
   }
+
+  //MARK: - Forecast Methods
 
   func updateSunsetTime(currentForecast: Forecast) {
     let sunset = currentForecast.daily?.data![0].sunsetTime
