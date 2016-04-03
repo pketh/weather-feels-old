@@ -15,8 +15,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   let menu = NSMenu()
 
   let currentApparentTemperatureMenuItemTag = 1
-  let sunsetTimeMenuItemTag = 2
-  let alertMenuItemTag = 3
+  let summaryMenuItemTag = 2
+  let sunsetTimeMenuItemTag = 3
+  let alertMenuItemTag = 4
 
   func applicationDidFinishLaunching(aNotification: NSNotification) {
     self.menu.autoenablesItems = false
@@ -25,16 +26,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
       // button.action = #selector(AppDelegate.updateData(_:))
       statusItem.menu = menu
 
-      let currentApparentTemperatureMenuItem = NSMenuItem(title: "🔮 --°", action: Selector(), keyEquivalent: "P")
+      let currentApparentTemperatureMenuItem = NSMenuItem(title: "🔮 --°", action: #selector(AppDelegate.openForecastInBrowser(_:)), keyEquivalent: "t")
       currentApparentTemperatureMenuItem.tag = currentApparentTemperatureMenuItemTag
       menu.addItem(currentApparentTemperatureMenuItem)
 
-      // addItem dailySummary, tag 2
-      //      dailySummary.hidden = true
-      // menuitem.indentationLevel: Int -> 0(default) to 15
-      // blah
+      let summaryMenuItem = NSMenuItem(title: "-----", action: Selector(), keyEquivalent: "")
+      summaryMenuItem.tag = summaryMenuItemTag
+      // summaryMenuItem.hidden = true
+      menu.addItem(summaryMenuItem)
 
-      let sunsetTimeMenuItem = NSMenuItem(title: "🌙 ----", action: Selector(), keyEquivalent: "")
+      let sunsetTimeMenuItem = NSMenuItem(title: "🌙 --:--", action: Selector(), keyEquivalent: "")
       sunsetTimeMenuItem.tag = sunsetTimeMenuItemTag
       // disable
       sunsetTimeMenuItem.enabled = false
@@ -71,18 +72,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   }
 
   func updateWeather(latitude: Double, longitude: Double) {
-     print("location is latitude \(latitude), longitude \(longitude)")
+    // print("location is latitude \(latitude), longitude \(longitude)")
     forecastIOClient.units = .Auto
     forecastIOClient.getForecast(latitude: latitude, longitude: longitude) { (currentForecast, error) -> Void in
       if let currentForecast = currentForecast {
         let apparentTemperature = Int(round((currentForecast.currently?.apparentTemperature)!))
 
         // next: get weather/clothes emojis for temp string
+
         let weatherUnit = self.localWeatherUnit(currentForecast)
         let currentApparentTemperatureMenuItem = self.menu.itemWithTag(self.currentApparentTemperatureMenuItemTag)
         currentApparentTemperatureMenuItem?.title = "\(apparentTemperature)°\(weatherUnit)"
+        currentApparentTemperatureMenuItem?.representedObject = "\(latitude),\(longitude)"
 
-//        get weather summary statement for the day 'clear throughout day' - disabled or indented item
+//        get weather summary statement for the day 'clear throughout day' - disabled
 //        print(currentForecast.currently?.summary)
 //        print(currentForecast.daily)
 
@@ -99,7 +102,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
     }
   }
 
-  //MARK: - Forecast Methods
+//MARK: - Forecast Methods
 
   func updateSunsetTime(currentForecast: Forecast) {
     let sunset = currentForecast.daily?.data![0].sunsetTime
@@ -131,21 +134,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   }
 
   func openAlertInBrowser(sender: AnyObject) {
-    print(sender.representedObject)
     if let uri = sender.representedObject {
       NSWorkspace.sharedWorkspace().openURL(NSURL(string: "\(uri!)")!)
     }
   }
 
-  // 👷
-  func printQuote(sender: AnyObject) {
-    print(sender)
-    print(sender.tag)
-    let quoteText = "Never put off until tomorrow what you can do the day after tomorrow."
-    let quoteAuthor = "Mark Twain"
-    print("\(quoteText) — \(quoteAuthor)")
+  func openForecastInBrowser(sender: AnyObject) {
+    if let location = sender.representedObject {
+      NSWorkspace.sharedWorkspace().openURL(NSURL(string: "http://forecast.io/#/f/\(location!)")!)
+    }
+    // http://forecast.io/#/f/40.6950,-73.9954
   }
-
 
 //  func applicationWillTerminate(aNotification: NSNotification) {
     // Insert code here to tear down your application
