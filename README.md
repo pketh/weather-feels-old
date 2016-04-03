@@ -2,7 +2,8 @@
 
 ☀️☁️☔️⛄️💦🌈
 
-v1 features: 
+## v1 features: 
+
 - [x] current apparent temp, 
 - [ ] current apparent temp as statusbar icon
 - [ ] weather range over the rest of the day (hidden in a menu)
@@ -16,10 +17,15 @@ v1 features:
 	also, (prepended)
 	- ☔️ add precip warning emoji if precipProbability > .. and preceipIntensity > ..
 		- 🌂 for less chance 
-
 - [x] weather alerts
-
 - [ ] sunset icon uses correct moonphase emoji icon 🌖🌗🌘🌒 etc
+
+
+## v1?
+
+- [ ] updator? sparkle? app store?
+- [ ] do I HAVE to have an dev certificate/pay 100$?
+
 
 ## build and compile
 
