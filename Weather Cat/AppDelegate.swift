@@ -15,7 +15,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   let menu = NSMenu()
 
   let currentApparentTemperatureMenuItemTag = 1
-  let alertMenuItemTag = 2
+  let sunsetTimeMenuItemTag = 2
+  let alertMenuItemTag = 3
 
   func applicationDidFinishLaunching(aNotification: NSNotification) {
     if let button = statusItem.button {
@@ -29,16 +30,24 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 
       // addItem dailySummary, tag 2
       //      dailySummary.hidden = true
+      // menuitem.indentationLevel: Int -> 0(default) to 15
       // blah
 
+      let sunsetTimeMenuItem = NSMenuItem(title: "🌙 ----", action: #selector(AppDelegate.openAlertInBrowser(_:)), keyEquivalent: "")
+      sunsetTimeMenuItem.tag = sunsetTimeMenuItemTag
+      menu.addItem(sunsetTimeMenuItem)
+
+      // ----------------
       menu.addItem(NSMenuItem.separatorItem())
-// add alerts , hidden by default
+
       let alertMenuItem = NSMenuItem(title: "----", action: #selector(AppDelegate.openAlertInBrowser(_:)), keyEquivalent: "")
       alertMenuItem.tag = alertMenuItemTag
       alertMenuItem.hidden = true
       menu.addItem(alertMenuItem)
 
+      // ----------------
       menu.addItem(NSMenuItem.separatorItem())
+
       menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApp.terminate(_:)), keyEquivalent: ""))
       updateLocationAndWeather()
     }
@@ -59,20 +68,26 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   }
 
   func updateWeather(latitude: Double, longitude: Double) {
-    // print("location is latitude \(latitude), longitude \(longitude)")
+     print("location is latitude \(latitude), longitude \(longitude)")
     forecastIOClient.units = .Auto
     forecastIOClient.getForecast(latitude: latitude, longitude: longitude) { (currentForecast, error) -> Void in
       if let currentForecast = currentForecast {
         let apparentTemperature = Int(round((currentForecast.currently?.apparentTemperature)!))
 
         // next: get weather/clothes emojis for temp string
-        // menuitem.indentationLevel: Int -> 0(default) to 15
         let weatherUnit = self.localWeatherUnit(currentForecast)
         let currentApparentTemperatureMenuItem = self.menu.itemWithTag(self.currentApparentTemperatureMenuItemTag)
         currentApparentTemperatureMenuItem?.title = "\(apparentTemperature)°\(weatherUnit)"
 
-//        get weather summary 'clear throughout day' - disabled item
-// get sunset time "🌙 7:23 PM" - disabled item
+//        get weather summary statement for the day 'clear throughout day' - disabled or indented item
+        print(currentForecast.currently?.summary)
+        print(currentForecast.daily)
+
+        self.updateSunsetTime(currentForecast)
+
+//      todo:
+//        print(currentForecast.hourly) "4pm 54F - 60F", etc
+// w weatherunit
 
         self.updateWeatherAlerts(currentForecast)
 
@@ -82,19 +97,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
     }
   }
 
+  func updateSunsetTime(currentForecast: Forecast) {
+    let sunsetTime = currentForecast.daily?.data![0].sunsetTime
+    let sunsetTimeString = "🌙 \(NSDateFormatter.localizedStringFromDate(sunsetTime!, dateStyle: NSDateFormatterStyle.NoStyle, timeStyle: NSDateFormatterStyle.ShortStyle))"
+    let sunsetTimeMenuItem = self.menu.itemWithTag(self.sunsetTimeMenuItemTag)
+    sunsetTimeMenuItem?.title = sunsetTimeString
+  }
+
   func updateWeatherAlerts(currentForecast: Forecast) {
     let alertMenuItem = self.menu.itemWithTag(self.alertMenuItemTag)
     if let alerts: Alert = currentForecast.alerts?[0] {
-      // todo: update menuitem and unhide instead
-      // hide if no alerts
-      print(alerts.title)
-      print(alertMenuItem)
-      alertMenuItem?.title = "\(alerts.title)..."
+      alertMenuItem?.title = "\(alerts.title)"
       alertMenuItem?.hidden = false
-
-//      let alertMenuItem = NSMenuItem(title: "\(alerts.title)", action: #selector(AppDelegate.openAlertInBrowser(_:)), keyEquivalent: "")
-//      alertMenuItem.representedObject = "\(alerts.uri)"
-//      self.menu.addItem(alertMenuItem)
+      alertMenuItem?.representedObject = "\(alerts.uri)"
     } else {
       alertMenuItem?.hidden = true
     }
@@ -112,6 +127,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   }
 
   func openAlertInBrowser(sender: AnyObject) {
+    print(sender.representedObject)
     if let uri = sender.representedObject {
       NSWorkspace.sharedWorkspace().openURL(NSURL(string: "\(uri!)")!)
     }
@@ -127,9 +143,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   }
 
 
-  func applicationWillTerminate(aNotification: NSNotification) {
+//  func applicationWillTerminate(aNotification: NSNotification) {
     // Insert code here to tear down your application
-  }
+//  }
 
 }
 
