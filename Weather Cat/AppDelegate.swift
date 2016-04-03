@@ -1,9 +1,5 @@
 //
-//  AppDelegate.swift
 //  Weather Cat
-//
-//  Created by Pirijan on 2016-04-02.
-//  Copyright © 2016 Pirijan Ketheswaran. All rights reserved.
 //
 
 import Cocoa
@@ -16,11 +12,11 @@ let forecastIOClient = APIClient(apiKey: "480b791a0bd0965a07bc7b19c4b901e7")
 class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-2)
   let locationManager = CLLocationManager()
+  let menu = NSMenu()
 
   func applicationDidFinishLaunching(aNotification: NSNotification) {
     if let button = statusItem.button {
       button.image = NSImage(named: "StatusBarButtonImage")
-      let menu = NSMenu()
       statusItem.menu = menu
       menu.addItem(NSMenuItem(title: "Print Quote", action: #selector(AppDelegate.printQuote(_:)), keyEquivalent: "P"))
       menu.addItem(NSMenuItem.separatorItem())
@@ -41,22 +37,32 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
     let latitude = location.coordinate.latitude
     let longitude = location.coordinate.longitude
     locationManager.stopUpdatingLocation() // Stop Location Manager - keep here to run just once
-    getWeather(latitude, longitude: longitude)
+    updateWeather(latitude, longitude: longitude)
   }
 
-  func getWeather(latitude: Double, longitude: Double) {
-    print("location is latitude \(latitude), longitude \(longitude)")
+  func updateWeather(latitude: Double, longitude: Double) {
+    // print("location is latitude \(latitude), longitude \(longitude)")
     forecastIOClient.getForecast(latitude: latitude, longitude: longitude) { (currentForecast, error) -> Void in
       if let currentForecast = currentForecast {
-        //  We got the current forecast!
-        print(currentForecast.currently)
+//        print(currentForecast.currently)
         let apparentTemperature = Int(round((currentForecast.currently?.apparentTemperature)!))
-        print(apparentTemperature)
+        self.menu.addItem(NSMenuItem(title: "\(apparentTemperature)°", action: #selector(AppDelegate.printQuote(_:)), keyEquivalent: ""))
+        self.updateWeatherAlerts(currentForecast)
+
       } else if let error = error {
         print(error)
       }
     }
   }
+
+  func updateWeatherAlerts(currentForecast: Forecast) {
+    if let alerts = currentForecast.alerts?[0] {
+      print(alerts.title)
+      print(alerts.description?.localizedLowercaseString)
+    }
+  }
+
+
 
   func printQuote(sender: AnyObject) {
     let quoteText = "Never put off until tomorrow what you can do the day after tomorrow."
