@@ -26,18 +26,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
       // button.action = #selector(AppDelegate.updateData(_:))
       statusItem.menu = menu
 
-      let currentApparentTemperatureMenuItem = NSMenuItem(title: "🔮 --°", action: #selector(AppDelegate.openForecastInBrowser(_:)), keyEquivalent: "t")
+      let currentApparentTemperatureMenuItem = NSMenuItem(title: "🔮 --°", action: #selector(AppDelegate.openForecastInBrowser(_:)), keyEquivalent: "z")
       currentApparentTemperatureMenuItem.tag = currentApparentTemperatureMenuItemTag
+      // 🐈 hide or remove this item once I get the temp in the statusitem
+      //      currentApparentTemperatureMenuItem.hidden = true
       menu.addItem(currentApparentTemperatureMenuItem)
 
-      let summaryMenuItem = NSMenuItem(title: "-----", action: Selector(), keyEquivalent: "")
+      let summaryMenuItem = NSMenuItem(title: "-----", action: #selector(AppDelegate.openForecastInBrowser(_:)), keyEquivalent: "t")
       summaryMenuItem.tag = summaryMenuItemTag
-      // summaryMenuItem.hidden = true
       menu.addItem(summaryMenuItem)
 
       let sunsetTimeMenuItem = NSMenuItem(title: "🌙 --:--", action: Selector(), keyEquivalent: "")
       sunsetTimeMenuItem.tag = sunsetTimeMenuItemTag
-      // disable
       sunsetTimeMenuItem.enabled = false
       menu.addItem(sunsetTimeMenuItem)
 
@@ -78,16 +78,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
       if let currentForecast = currentForecast {
         let apparentTemperature = Int(round((currentForecast.currently?.apparentTemperature)!))
 
-        // next: get weather/clothes emojis for temp string
-
+        // 🐈 set this to using temp in the statusitem
         let weatherUnit = self.localWeatherUnit(currentForecast)
         let currentApparentTemperatureMenuItem = self.menu.itemWithTag(self.currentApparentTemperatureMenuItemTag)
         currentApparentTemperatureMenuItem?.title = "\(apparentTemperature)°\(weatherUnit)"
         currentApparentTemperatureMenuItem?.representedObject = "\(latitude),\(longitude)"
 
-//        get weather summary statement for the day 'clear throughout day' - disabled
-//        print(currentForecast.currently?.summary)
-//        print(currentForecast.daily)
+        let weatherEmoji = self.weatherEmoji(currentForecast)
+        let summary = (currentForecast.minutely?.summary)! as NSString
+        let summaryMenuItem = self.menu.itemWithTag(self.summaryMenuItemTag)
+        summaryMenuItem?.title = "\(weatherEmoji) \(summary)"
+        summaryMenuItem?.representedObject = "\(latitude),\(longitude)"
+        // ☔️ add precip warning emoji if precipProbability > .. and preceipIntensity > ..
+        // next: get weather/clothes emojis for temp string
+
 
         self.updateSunsetTime(currentForecast)
 
@@ -104,7 +108,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 
 //MARK: - Forecast Methods
 
+  func weatherEmoji(currentForecast: Forecast) -> String {
+    return "👙👟"
+  }
+
   func updateSunsetTime(currentForecast: Forecast) {
+    // todo moonphase emoji 🌖🌗🌘🌒 etc
     let sunset = currentForecast.daily?.data![0].sunsetTime
     let sunsetTime = "🌙 \(NSDateFormatter.localizedStringFromDate(sunset!, dateStyle: NSDateFormatterStyle.NoStyle, timeStyle: NSDateFormatterStyle.ShortStyle))"
     let sunsetTimeMenuItem = self.menu.itemWithTag(self.sunsetTimeMenuItemTag)
