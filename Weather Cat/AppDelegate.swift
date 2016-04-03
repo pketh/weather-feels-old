@@ -44,9 +44,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
     // print("location is latitude \(latitude), longitude \(longitude)")
     forecastIOClient.getForecast(latitude: latitude, longitude: longitude) { (currentForecast, error) -> Void in
       if let currentForecast = currentForecast {
-//        print(currentForecast.currently)
         let apparentTemperature = Int(round((currentForecast.currently?.apparentTemperature)!))
+
+        // 🔮
         self.menu.addItem(NSMenuItem(title: "\(apparentTemperature)°", action: #selector(AppDelegate.printQuote(_:)), keyEquivalent: ""))
+
         self.updateWeatherAlerts(currentForecast)
 
       } else if let error = error {
@@ -57,12 +59,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 
   func updateWeatherAlerts(currentForecast: Forecast) {
     if let alerts = currentForecast.alerts?[0] {
-      print(alerts.title)
-      print(alerts.description?.localizedLowercaseString)
+      self.menu.addItem(NSMenuItem(title: "\(alerts.title)", action: #selector(AppDelegate.openAlertInBrowser(_:)), keyEquivalent: ""))
+      // action: open browser to url:
+//       print(alerts.uri)
+      NSWorkspace.sharedWorkspace().openURL(NSURL(string: "\(alerts.uri)")!)
+
     }
   }
 
-
+  func openAlertInBrowser(sender: AnyObject) {
+    print("hi")
+    print(sender)
+  }
 
   func printQuote(sender: AnyObject) {
     let quoteText = "Never put off until tomorrow what you can do the day after tomorrow."
