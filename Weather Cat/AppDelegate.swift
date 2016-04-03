@@ -28,9 +28,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 
       // addItem dailySummary, tag 2
       //      dailySummary.hidden = true
+      // blah
 
       menu.addItem(NSMenuItem.separatorItem())
-      menu.addItem(NSMenuItem(title: "Quit Quotes", action: #selector(NSApp.terminate(_:)), keyEquivalent: "q"))
+// add alerts , hidden by default
+
+      menu.addItem(NSMenuItem.separatorItem())
+      menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApp.terminate(_:)), keyEquivalent: ""))
       updateLocationAndWeather()
     }
   }
@@ -51,18 +55,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 
   func updateWeather(latitude: Double, longitude: Double) {
     // print("location is latitude \(latitude), longitude \(longitude)")
+    forecastIOClient.units = .Auto
     forecastIOClient.getForecast(latitude: latitude, longitude: longitude) { (currentForecast, error) -> Void in
       if let currentForecast = currentForecast {
         let apparentTemperature = Int(round((currentForecast.currently?.apparentTemperature)!))
 
         // next: get weather/clothes emojis for temp string
         // menuitem.indentationLevel: Int -> 0(default) to 15
-
-        // 🔮 update currentApparentTemperatureMenuItem title based on tag
-//        let x = NSMenuItem(title: "\(apparentTemperature)°", action: #selector(AppDelegate.printQuote(_:)), keyEquivalent: "")
-//        self.menu.addItem(x)
+        let weatherUnit = self.localWeatherUnit(currentForecast)
         let currentApparentTemperatureMenuItem = self.menu.itemWithTag(self.currentApparentTemperatureMenuItemTag)
-        currentApparentTemperatureMenuItem?.title = "\(apparentTemperature)°"
+        currentApparentTemperatureMenuItem?.title = "\(apparentTemperature)°\(weatherUnit)"
 
 //        get weather summary 'clear throughout day' - disabled item
 // get sunset time "🌙 7:23 PM" - disabled item
@@ -77,10 +79,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 
   func updateWeatherAlerts(currentForecast: Forecast) {
     if let alerts: Alert = currentForecast.alerts?[0] {
+      // todo: update menuitem and unhide instead
+      // hide if no alerts
       let alertMenuItem = NSMenuItem(title: "\(alerts.title)", action: #selector(AppDelegate.openAlertInBrowser(_:)), keyEquivalent: "")
       alertMenuItem.representedObject = "\(alerts.uri)"
       self.menu.addItem(alertMenuItem)
     }
+  }
+
+  func localWeatherUnit(currentForecast: Forecast) -> String {
+    let forecastUnit = currentForecast.flags?.units
+    var unit = ""
+    if forecastUnit == "us" {
+      unit = "F"
+    } else {
+      unit = "C"
+    }
+    return unit
   }
 
   func openAlertInBrowser(sender: AnyObject) {
