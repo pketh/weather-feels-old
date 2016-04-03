@@ -14,11 +14,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   let locationManager = CLLocationManager()
   let menu = NSMenu()
 
+  let currentApparentTemperatureMenuItemTag = 1
+
   func applicationDidFinishLaunching(aNotification: NSNotification) {
     if let button = statusItem.button {
       button.image = NSImage(named: "StatusBarButtonImage")
+      // button.action = #selector(AppDelegate.updateData(_:))
       statusItem.menu = menu
-      menu.addItem(NSMenuItem(title: "Print Quote", action: #selector(AppDelegate.printQuote(_:)), keyEquivalent: "P"))
+
+      let currentApparentTemperatureMenuItem = NSMenuItem(title: "🔮 --°", action: #selector(AppDelegate.printQuote(_:)), keyEquivalent: "P")
+      currentApparentTemperatureMenuItem.tag = currentApparentTemperatureMenuItemTag
+      menu.addItem(currentApparentTemperatureMenuItem)
+
+      // addItem dailySummary, tag 2
+      //      dailySummary.hidden = true
+
       menu.addItem(NSMenuItem.separatorItem())
       menu.addItem(NSMenuItem(title: "Quit Quotes", action: #selector(NSApp.terminate(_:)), keyEquivalent: "q"))
       updateLocationAndWeather()
@@ -28,7 +38,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   func updateLocationAndWeather() {
     self.locationManager.delegate = self
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
-    //self.locationManager.distanceFilter = 10
     self.locationManager.startUpdatingLocation()
   }
 
@@ -36,7 +45,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
     let location:CLLocation = locations[locations.count-1] as! CLLocation
     let latitude = location.coordinate.latitude
     let longitude = location.coordinate.longitude
-    locationManager.stopUpdatingLocation() // Stop Location Manager - keep here to run just once
+    locationManager.stopUpdatingLocation() // Stop Location Manager - keep here to run just once -> ⛄️ update daily
     updateWeather(latitude, longitude: longitude)
   }
 
@@ -46,8 +55,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
       if let currentForecast = currentForecast {
         let apparentTemperature = Int(round((currentForecast.currently?.apparentTemperature)!))
 
-        // 🔮
-        self.menu.addItem(NSMenuItem(title: "\(apparentTemperature)°", action: #selector(AppDelegate.printQuote(_:)), keyEquivalent: ""))
+        // next: get weather/clothes emojis for temp string
+        // menuitem.indentationLevel: Int -> 0(default) to 15
+
+        // 🔮 update currentApparentTemperatureMenuItem title based on tag
+//        let x = NSMenuItem(title: "\(apparentTemperature)°", action: #selector(AppDelegate.printQuote(_:)), keyEquivalent: "")
+//        self.menu.addItem(x)
+        let currentApparentTemperatureMenuItem = self.menu.itemWithTag(self.currentApparentTemperatureMenuItemTag)
+        currentApparentTemperatureMenuItem?.title = "\(apparentTemperature)°"
+
+//        get weather summary 'clear throughout day' - disabled item
+// get sunset time "🌙 7:23 PM" - disabled item
 
         self.updateWeatherAlerts(currentForecast)
 
@@ -71,7 +89,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
     }
   }
 
+  // 👷
   func printQuote(sender: AnyObject) {
+    print(sender)
+    print(sender.tag)
     let quoteText = "Never put off until tomorrow what you can do the day after tomorrow."
     let quoteAuthor = "Mark Twain"
     print("\(quoteText) — \(quoteAuthor)")
