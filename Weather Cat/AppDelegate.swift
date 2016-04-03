@@ -15,6 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   let menu = NSMenu()
 
   let currentApparentTemperatureMenuItemTag = 1
+  let alertMenuItemTag = 2
 
   func applicationDidFinishLaunching(aNotification: NSNotification) {
     if let button = statusItem.button {
@@ -32,6 +33,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 
       menu.addItem(NSMenuItem.separatorItem())
 // add alerts , hidden by default
+      let alertMenuItem = NSMenuItem(title: "----", action: #selector(AppDelegate.openAlertInBrowser(_:)), keyEquivalent: "")
+      alertMenuItem.tag = alertMenuItemTag
+      alertMenuItem.hidden = true
+      menu.addItem(alertMenuItem)
 
       menu.addItem(NSMenuItem.separatorItem())
       menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApp.terminate(_:)), keyEquivalent: ""))
@@ -78,12 +83,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   }
 
   func updateWeatherAlerts(currentForecast: Forecast) {
+    let alertMenuItem = self.menu.itemWithTag(self.alertMenuItemTag)
     if let alerts: Alert = currentForecast.alerts?[0] {
       // todo: update menuitem and unhide instead
       // hide if no alerts
-      let alertMenuItem = NSMenuItem(title: "\(alerts.title)", action: #selector(AppDelegate.openAlertInBrowser(_:)), keyEquivalent: "")
-      alertMenuItem.representedObject = "\(alerts.uri)"
-      self.menu.addItem(alertMenuItem)
+      print(alerts.title)
+      print(alertMenuItem)
+      alertMenuItem?.title = "\(alerts.title)..."
+      alertMenuItem?.hidden = false
+
+//      let alertMenuItem = NSMenuItem(title: "\(alerts.title)", action: #selector(AppDelegate.openAlertInBrowser(_:)), keyEquivalent: "")
+//      alertMenuItem.representedObject = "\(alerts.uri)"
+//      self.menu.addItem(alertMenuItem)
+    } else {
+      alertMenuItem?.hidden = true
     }
   }
 
