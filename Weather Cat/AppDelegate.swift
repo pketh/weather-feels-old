@@ -58,18 +58,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   }
 
   func updateWeatherAlerts(currentForecast: Forecast) {
-    if let alerts = currentForecast.alerts?[0] {
-      self.menu.addItem(NSMenuItem(title: "\(alerts.title)", action: #selector(AppDelegate.openAlertInBrowser(_:)), keyEquivalent: ""))
-      // action: open browser to url:
-//       print(alerts.uri)
-      NSWorkspace.sharedWorkspace().openURL(NSURL(string: "\(alerts.uri)")!)
-
+    if let alerts: Alert = currentForecast.alerts?[0] {
+      let alertMenuItem = NSMenuItem(title: "\(alerts.title)", action: #selector(AppDelegate.openAlertInBrowser(_:)), keyEquivalent: "")
+      alertMenuItem.representedObject = "\(alerts.uri)"
+      self.menu.addItem(alertMenuItem)
     }
   }
 
   func openAlertInBrowser(sender: AnyObject) {
-    print("hi")
-    print(sender)
+    if let uri = sender.representedObject {
+      NSWorkspace.sharedWorkspace().openURL(NSURL(string: "\(uri!)")!)
+    }
   }
 
   func printQuote(sender: AnyObject) {
