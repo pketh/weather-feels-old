@@ -38,6 +38,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   // gets current weather for *location
   // }
 
+
+
   func printQuote(sender: AnyObject) {
     let quoteText = "Never put off until tomorrow what you can do the day after tomorrow."
     let quoteAuthor = "Mark Twain"
