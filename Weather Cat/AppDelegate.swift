@@ -11,6 +11,7 @@ let forecastIOClient = APIClient(apiKey: "480b791a0bd0965a07bc7b19c4b901e7")
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
+  // The appearance and behavior of the status item are then set using the button property
   let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-2)
   let locationManager = CLLocationManager()
   let menu = NSMenu()
@@ -24,6 +25,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
     self.menu.autoenablesItems = false
     if let button = statusItem.button {
       button.image = NSImage(named: "StatusBarButtonImage")
+      button.title = "--°"
       // button.action = #selector(AppDelegate.updateData(_:))
       statusItem.menu = menu
 
@@ -78,11 +80,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
       if let currentForecast = currentForecast {
         let apparentTemperature = Int(round((currentForecast.currently?.apparentTemperature)!))
 
-        // 🐈 set this to using temp in the statusitem
         let weatherUnit = self.localWeatherUnit(currentForecast)
-        let currentApparentTemperatureMenuItem = self.menu.itemWithTag(self.currentApparentTemperatureMenuItemTag)
-        currentApparentTemperatureMenuItem?.title = "\(apparentTemperature)°\(weatherUnit)"
-        currentApparentTemperatureMenuItem?.representedObject = "\(latitude),\(longitude)"
+        if let currentApparentTemperatureMenuItem = self.menu.itemWithTag(self.currentApparentTemperatureMenuItemTag) {
+          currentApparentTemperatureMenuItem.title = "\(apparentTemperature)°\(weatherUnit)"
+          currentApparentTemperatureMenuItem.representedObject = "\(latitude),\(longitude)"
+        }
+        // 🐈 set this to using temp in the statusitem
+        if let statusItemButton = self.statusItem.button {
+          statusItemButton.title = "\(apparentTemperature)°"
+        }
 
         let weatherEmoji = self.weatherEmoji(currentForecast)
         let summary = (currentForecast.daily?.data![0].summary)! as NSString
@@ -121,12 +127,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 
   func getPrecipWeatherEmoji(currentForecast: Forecast) -> String {
     let precipProbability = currentForecast.daily?.data![0].precipProbability as Float!
-    print(precipProbability)
-
+    // print(precipProbability)
     let highPrecipProbability = 0.6 as Float
     let lowPrecipProbability = 0.2 as Float
     let precipIntensity = currentForecast.daily?.data![0].precipIntensity as Float!
-    print(precipIntensity)
+    // print(precipIntensity)
     let moderatePrecipIntensity = 0.05 as Float
     // 0.017 in./hr. corresponds to light precipitation, 0.1 in./hr. corresponds to moderate precipitation, and 0.4 in./hr. corresponds to heavy precipitation.
     var precipEmoji = ""
