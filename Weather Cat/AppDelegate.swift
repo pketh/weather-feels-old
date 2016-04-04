@@ -111,29 +111,29 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
     let apparentTemperature = Int(round((currentForecast.currently?.apparentTemperature)!))
     let warm = 70
     let cool = 50
-//    - hot(sunny+>70) 👙👟
-//      - medium(50-70) 👕👗
-//        - cold(>50) 👖👘
-//
-//    also, (prepended)
-
-    //    - >= 0.6 ☔️ add precip warning emoji if precipProbability > .. and preceipIntensity > ..
-    //    - < 0.6 🌂 for less chance
-    // - < 0.2 no emoji
-    // ☔️ add precip warning emoji if precipProbability > .. and preceipIntensity > ..
-    // next: get weather/clothes emojis for temp string
-    return "\(precipEmoji)👙👟"
+    var weatherEmoji = ""
+    if apparentTemperature >= warm {
+      weatherEmoji = "👙👟"
+    } else if apparentTemperature < warm && apparentTemperature >= cool {
+      weatherEmoji = "👕👗"
+    } else {
+      weatherEmoji = "👖👘"
+    }
+    return "\(precipEmoji)\(weatherEmoji)"
   }
 
   func getPrecipWeatherEmoji(currentForecast: Forecast) -> String {
     let precipProbability = currentForecast.daily?.data![0].precipProbability as Float!
-    print(precipProbability)
+    let highPrecipProbability = 0.6 as Float
+    let lowPrecipProbability = 0.2 as Float
+    let precipIntensity = currentForecast.daily?.data![0].precipIntensity as Float!
+    let moderatePrecipIntensity = 0.1 as Float
     var precipEmoji = ""
-    if precipProbability >= 0.6 {
+    if precipProbability >= highPrecipProbability && precipIntensity >= moderatePrecipIntensity {
       precipEmoji = "☔️"
-    } else if precipProbability < 0.6 && precipProbability >= 0.2 {
+    } else if precipProbability >= lowPrecipProbability {
       precipEmoji = "🌂"
-    } else if precipProbability < 0.2 {
+    } else if precipProbability < lowPrecipProbability {
       precipEmoji = ""
     }
     return precipEmoji

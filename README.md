@@ -23,6 +23,7 @@
 - [ ] obfuscate/gitignore/change forecast api key
 - [ ] marketing/download site (gh-pages)
 - [ ] show sunrise or sunset(`sunRiseOrSet`) , depending on what's upcoming (ie: show sunrise after the sun has set, and vice versa)
+- [ ] preference option to start on boot (bool)
 
 ## v1?
 
