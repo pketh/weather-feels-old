@@ -26,13 +26,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
       // button.action = #selector(AppDelegate.updateData(_:))
       statusItem.menu = menu
 
-      let currentApparentTemperatureMenuItem = NSMenuItem(title: "🔮 --°", action: #selector(AppDelegate.openForecastInBrowser(_:)), keyEquivalent: "z")
+      let currentApparentTemperatureMenuItem = NSMenuItem(title: "--°", action: #selector(AppDelegate.openForecastInBrowser(_:)), keyEquivalent: "t")
       currentApparentTemperatureMenuItem.tag = currentApparentTemperatureMenuItemTag
       // 🐈 hide or remove this item once I get the temp in the statusitem
       //      currentApparentTemperatureMenuItem.hidden = true
       menu.addItem(currentApparentTemperatureMenuItem)
 
-      let summaryMenuItem = NSMenuItem(title: "-----", action: #selector(AppDelegate.openForecastInBrowser(_:)), keyEquivalent: "t")
+      // becomes a submenu w hourly updates list
+      let summaryMenuItem = NSMenuItem(title: "🔮🌈 -----", action: Selector(), keyEquivalent: "")
       summaryMenuItem.tag = summaryMenuItemTag
       menu.addItem(summaryMenuItem)
 
@@ -88,16 +89,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
         let summary = (currentForecast.minutely?.summary)! as NSString
         let summaryMenuItem = self.menu.itemWithTag(self.summaryMenuItemTag)
         summaryMenuItem?.title = "\(weatherEmoji) \(summary)"
-        summaryMenuItem?.representedObject = "\(latitude),\(longitude)"
-        // ☔️ add precip warning emoji if precipProbability > .. and preceipIntensity > ..
-        // next: get weather/clothes emojis for temp string
 
-
+        //      todo: submenu
+        //        print(currentForecast.hourly) "4pm 54F - 60F", etc
+        // w weatherunit
         self.updateSunsetTime(currentForecast)
-
-//      todo:
-//        print(currentForecast.hourly) "4pm 54F - 60F", etc
-// w weatherunit
 
         self.updateWeatherAlerts(currentForecast)
       } else if let error = error {
@@ -109,21 +105,55 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 //MARK: - Forecast Methods
 
   func weatherEmoji(currentForecast: Forecast) -> String {
+//    - hot(sunny+>70) 👙👟
+//      - medium(60-70) 👕👗
+//        - cold(>60) 👖👘
+//
+//    also, (prepended)
+//    - ☔️ add precip warning emoji if precipProbability > .. and preceipIntensity > ..
+//    - 🌂 for less chance
+    // ☔️ add precip warning emoji if precipProbability > .. and preceipIntensity > ..
+    // next: get weather/clothes emojis for temp string
     return "👙👟"
   }
 
   func updateSunsetTime(currentForecast: Forecast) {
-    // todo moonphase emoji 🌖🌗🌘🌒 etc
+    let moonPhase = currentForecast.daily?.data![0].moonPhase
+    let moon = updateMoonPhaseEmoji(moonPhase!)
     let sunset = currentForecast.daily?.data![0].sunsetTime
-    let sunsetTime = "🌙 \(NSDateFormatter.localizedStringFromDate(sunset!, dateStyle: NSDateFormatterStyle.NoStyle, timeStyle: NSDateFormatterStyle.ShortStyle))"
+    let sunsetTime = "\(moon) \(NSDateFormatter.localizedStringFromDate(sunset!, dateStyle: NSDateFormatterStyle.NoStyle, timeStyle: NSDateFormatterStyle.ShortStyle))"
     let sunsetTimeMenuItem = self.menu.itemWithTag(self.sunsetTimeMenuItemTag)
     sunsetTimeMenuItem?.title = sunsetTime
+  }
+
+  func updateMoonPhaseEmoji(moonPhase: Float) -> String {
+    var moon = ""
+    if moonPhase == 0 || moonPhase == 100 {
+      moon = "🌑"
+    } else if moonPhase > 0 && moonPhase < 25 {
+      moon = "🌒"
+    } else if moonPhase == 25 {
+      moon = "🌓"
+    } else if moonPhase > 25 && moonPhase < 50 {
+      moon = "🌔"
+    } else if moonPhase == 50 {
+      moon = "🌕"
+    } else if moonPhase > 50 && moonPhase < 75 {
+      moon = "🌖"
+    } else if moonPhase == 75 {
+      moon = "🌗"
+    } else if moonPhase > 75 && moonPhase < 100 {
+      moon = "🌘"
+    } else {
+      moon = "🌙"
+    }
+    return moon
   }
 
   func updateWeatherAlerts(currentForecast: Forecast) {
     let alertMenuItem = self.menu.itemWithTag(self.alertMenuItemTag)
     if let alerts: Alert = currentForecast.alerts?[0] {
-      alertMenuItem?.title = "\(alerts.title)"
+      alertMenuItem?.title = "\(alerts.title)…"
       alertMenuItem?.hidden = false
       alertMenuItem?.representedObject = "\(alerts.uri)"
     } else {
