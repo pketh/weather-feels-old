@@ -121,10 +121,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 
   func getPrecipWeatherEmoji(currentForecast: Forecast) -> String {
     let precipProbability = currentForecast.daily?.data![0].precipProbability as Float!
+    print(precipProbability)
+
     let highPrecipProbability = 0.6 as Float
     let lowPrecipProbability = 0.2 as Float
     let precipIntensity = currentForecast.daily?.data![0].precipIntensity as Float!
-    let moderatePrecipIntensity = 0.1 as Float
+    print(precipIntensity)
+    let moderatePrecipIntensity = 0.05 as Float
+    // 0.017 in./hr. corresponds to light precipitation, 0.1 in./hr. corresponds to moderate precipitation, and 0.4 in./hr. corresponds to heavy precipitation.
     var precipEmoji = ""
     if precipProbability >= highPrecipProbability && precipIntensity >= moderatePrecipIntensity {
       precipEmoji = "☔️"
