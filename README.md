@@ -18,7 +18,7 @@
 	- ☔️ add precip warning emoji if precipProbability > .. and preceipIntensity > ..
 		- 🌂 for less chance 
 - [x] weather alerts
-- [ ] sunset icon uses correct moonphase emoji icon 🌖🌗🌘🌒 etc
+- [x] sunset icon uses correct moonphase emoji icon 🌖🌗🌘🌒 etc
 
 
 ## v1?
