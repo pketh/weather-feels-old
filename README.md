@@ -23,13 +23,17 @@
 - [ ] obfuscate/gitignore/change forecast api key
 - [x] show sunrise or sunset(`sunRiseOrSet`) , depending on what's upcoming (ie: show sunrise after the sun has set, and vice versa)
 - [ ] preference option to start app on boot (bool)
-- [ ] marketing/download site (gh-pages)
+- [ ] get/borrow/steal app store dev acct
+- [ ] marketing(what)/educational(why)/download(how) site (on gh-pages)
 	- has faqs section at the bottom, model it after the overcast site
+		- why not mac apps: culture of nondisposable, sustainable software/economy, apple neglect of the store (https://dancounsell.com/articles/not-on-the-mac-app-store)
 
 ## v1?
 
+http://mattgemmell.com/releasing-outside-the-app-store/
+
 - [ ] updator? sparkle? app store?
-- [ ] do I HAVE to have an dev certificate/pay 100$?
+- [x] do I HAVE to have an dev certificate/pay 100$? (yup)
 
 
 ## v2 
