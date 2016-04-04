@@ -88,7 +88,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
         currentApparentTemperatureMenuItem?.representedObject = "\(latitude),\(longitude)"
 
         let weatherEmoji = self.weatherEmoji(currentForecast)
-        let summary = (currentForecast.minutely?.summary)! as NSString
+        let summary = (currentForecast.daily?.data![0].summary)! as NSString
         let summaryMenuItem = self.menu.itemWithTag(self.summaryMenuItemTag)
         summaryMenuItem?.title = "\(weatherEmoji) \(summary)"
 
@@ -107,16 +107,36 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 //MARK: - Forecast Methods
 
   func weatherEmoji(currentForecast: Forecast) -> String {
+    let precipEmoji = getPrecipWeatherEmoji(currentForecast)
+    let apparentTemperature = Int(round((currentForecast.currently?.apparentTemperature)!))
+    let warm = 70
+    let cool = 50
 //    - hot(sunny+>70) 👙👟
-//      - medium(60-70) 👕👗
-//        - cold(>60) 👖👘
+//      - medium(50-70) 👕👗
+//        - cold(>50) 👖👘
 //
 //    also, (prepended)
-//    - ☔️ add precip warning emoji if precipProbability > .. and preceipIntensity > ..
-//    - 🌂 for less chance
+
+    //    - >= 0.6 ☔️ add precip warning emoji if precipProbability > .. and preceipIntensity > ..
+    //    - < 0.6 🌂 for less chance
+    // - < 0.2 no emoji
     // ☔️ add precip warning emoji if precipProbability > .. and preceipIntensity > ..
     // next: get weather/clothes emojis for temp string
-    return "👙👟"
+    return "\(precipEmoji)👙👟"
+  }
+
+  func getPrecipWeatherEmoji(currentForecast: Forecast) -> String {
+    let precipProbability = currentForecast.daily?.data![0].precipProbability as Float!
+    print(precipProbability)
+    var precipEmoji = ""
+    if precipProbability >= 0.6 {
+      precipEmoji = "☔️"
+    } else if precipProbability < 0.6 && precipProbability >= 0.2 {
+      precipEmoji = "🌂"
+    } else if precipProbability < 0.2 {
+      precipEmoji = ""
+    }
+    return precipEmoji
   }
 
   func updateSunriseOrSunsetTime(currentForecast: Forecast) {
@@ -133,7 +153,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
       let sunsetTime = "\(moon) \(NSDateFormatter.localizedStringFromDate(sunset!, dateStyle: NSDateFormatterStyle.NoStyle, timeStyle: NSDateFormatterStyle.ShortStyle))"
       sunriseOrSunset = sunsetTime
     }
-    //
     let sunriseOrSunsetTimeMenuItem = self.menu.itemWithTag(self.sunriseOrSunsetTimeMenuItemTag)
     sunriseOrSunsetTimeMenuItem?.title = sunriseOrSunset
   }
