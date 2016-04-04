@@ -19,7 +19,7 @@
 		- 🌂 for less chance 
 - [x] weather alerts
 - [x] sunset icon uses correct moonphase emoji icon 🌖🌗🌘🌒 etc
-
+- [ ] marketing/download site (gh-pages)
 
 ## v1?
 
