@@ -19,6 +19,7 @@
 		- 🌂 for less chance 
 - [x] weather alerts
 - [x] sunset icon uses correct moonphase emoji icon 🌖🌗🌘🌒 etc
+- [ ] obfuscate/gitignore/change forecast api key
 - [ ] marketing/download site (gh-pages)
 
 ## v1?
