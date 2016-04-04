@@ -17,7 +17,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 
   let currentApparentTemperatureMenuItemTag = 1
   let summaryMenuItemTag = 2
-  // 👷 'sunset' to 'sunriseOrSunset'
   let sunriseOrSunsetTimeMenuItemTag = 3
   let alertMenuItemTag = 4
 
@@ -30,11 +29,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 
       let currentApparentTemperatureMenuItem = NSMenuItem(title: "--°", action: #selector(AppDelegate.openForecastInBrowser(_:)), keyEquivalent: "t")
       currentApparentTemperatureMenuItem.tag = currentApparentTemperatureMenuItemTag
-      // 🐈 hide or remove this item once I get the temp in the statusitem
-      //      currentApparentTemperatureMenuItem.hidden = true
       menu.addItem(currentApparentTemperatureMenuItem)
 
-      // becomes a submenu w hourly updates list
+      // 🐈 todo: becomes a submenu w hourly updates list
       let summaryMenuItem = NSMenuItem(title: "🔮🌈 -----", action: Selector(), keyEquivalent: "")
       summaryMenuItem.tag = summaryMenuItemTag
       menu.addItem(summaryMenuItem)
@@ -92,7 +89,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
         let summaryMenuItem = self.menu.itemWithTag(self.summaryMenuItemTag)
         summaryMenuItem?.title = "\(weatherEmoji) \(summary)"
 
-        //      todo: submenu
+        // 🐈 todo: submenu
         //        print(currentForecast.hourly) "4pm 54F - 60F", etc
         // w weatherunit
         self.updateSunriseOrSunsetTime(currentForecast)

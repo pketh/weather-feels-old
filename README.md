@@ -31,6 +31,10 @@
 - [ ] do I HAVE to have an dev certificate/pay 100$?
 
 
+## v2 
+
+- [ ] tests (at least for helper methods)
+
 ## build and compile
 
 `pod install`
