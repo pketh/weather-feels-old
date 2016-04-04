@@ -5,6 +5,7 @@
 import Cocoa
 import CoreLocation
 
+import SwiftDate
 import ForecastIO
 let forecastIOClient = APIClient(apiKey: "480b791a0bd0965a07bc7b19c4b901e7")
 
@@ -16,7 +17,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 
   let currentApparentTemperatureMenuItemTag = 1
   let summaryMenuItemTag = 2
-  let sunsetTimeMenuItemTag = 3
+  // 👷 'sunset' to 'sunriseOrSunset'
+  let sunriseOrSunsetTimeMenuItemTag = 3
   let alertMenuItemTag = 4
 
   func applicationDidFinishLaunching(aNotification: NSNotification) {
@@ -37,10 +39,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
       summaryMenuItem.tag = summaryMenuItemTag
       menu.addItem(summaryMenuItem)
 
-      let sunsetTimeMenuItem = NSMenuItem(title: "🌙 --:--", action: Selector(), keyEquivalent: "")
-      sunsetTimeMenuItem.tag = sunsetTimeMenuItemTag
-      sunsetTimeMenuItem.enabled = false
-      menu.addItem(sunsetTimeMenuItem)
+      let sunriseOrSunsetTimeMenuItem = NSMenuItem(title: "🌙 --:--", action: Selector(), keyEquivalent: "")
+      sunriseOrSunsetTimeMenuItem.tag = sunriseOrSunsetTimeMenuItemTag
+      sunriseOrSunsetTimeMenuItem.enabled = false
+      menu.addItem(sunriseOrSunsetTimeMenuItem)
 
       // ----------------
       menu.addItem(NSMenuItem.separatorItem())
@@ -93,7 +95,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
         //      todo: submenu
         //        print(currentForecast.hourly) "4pm 54F - 60F", etc
         // w weatherunit
-        self.updateSunsetTime(currentForecast)
+        self.updateSunriseOrSunsetTime(currentForecast)
 
         self.updateWeatherAlerts(currentForecast)
       } else if let error = error {
@@ -117,13 +119,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
     return "👙👟"
   }
 
-  func updateSunsetTime(currentForecast: Forecast) {
-    let moonPhase = currentForecast.daily?.data![0].moonPhase
-    let moon = updateMoonPhaseEmoji(moonPhase!)
-    let sunset = currentForecast.daily?.data![0].sunsetTime
-    let sunsetTime = "\(moon) \(NSDateFormatter.localizedStringFromDate(sunset!, dateStyle: NSDateFormatterStyle.NoStyle, timeStyle: NSDateFormatterStyle.ShortStyle))"
-    let sunsetTimeMenuItem = self.menu.itemWithTag(self.sunsetTimeMenuItemTag)
-    sunsetTimeMenuItem?.title = sunsetTime
+  func updateSunriseOrSunsetTime(currentForecast: Forecast) {
+    let sunset = currentForecast.daily?.data![0].sunsetTime as NSDate!
+    let sunrise = currentForecast.daily?.data![0].sunriseTime as NSDate!
+    let now = NSDate()
+    var sunriseOrSunset = ""
+    if now < sunrise {
+      let sunriseTime = "☀️ \(NSDateFormatter.localizedStringFromDate(sunrise!, dateStyle: NSDateFormatterStyle.NoStyle, timeStyle: NSDateFormatterStyle.ShortStyle))"
+      sunriseOrSunset = sunriseTime
+    } else {
+      let moonPhase = currentForecast.daily?.data![0].moonPhase
+      let moon = updateMoonPhaseEmoji(moonPhase!)
+      let sunsetTime = "\(moon) \(NSDateFormatter.localizedStringFromDate(sunset!, dateStyle: NSDateFormatterStyle.NoStyle, timeStyle: NSDateFormatterStyle.ShortStyle))"
+      sunriseOrSunset = sunsetTime
+    }
+    //
+    let sunriseOrSunsetTimeMenuItem = self.menu.itemWithTag(self.sunriseOrSunsetTimeMenuItemTag)
+    sunriseOrSunsetTimeMenuItem?.title = sunriseOrSunset
   }
 
   func updateMoonPhaseEmoji(moonPhase: Float) -> String {
@@ -182,7 +194,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
     if let location = sender.representedObject {
       NSWorkspace.sharedWorkspace().openURL(NSURL(string: "http://forecast.io/#/f/\(location!)")!)
     }
-    // http://forecast.io/#/f/40.6950,-73.9954
   }
 
 //  func applicationWillTerminate(aNotification: NSNotification) {

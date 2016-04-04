@@ -19,8 +19,10 @@
 		- 🌂 for less chance 
 - [x] weather alerts
 - [x] sunset icon uses correct moonphase emoji icon 🌖🌗🌘🌒 etc
+- [ ] weather autoupdates (hourly?)
 - [ ] obfuscate/gitignore/change forecast api key
 - [ ] marketing/download site (gh-pages)
+- [ ] show sunrise or sunset(`sunRiseOrSet`) , depending on what's upcoming (ie: show sunrise after the sun has set, and vice versa)
 
 ## v1?
 
