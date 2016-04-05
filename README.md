@@ -5,7 +5,8 @@
 ## v1 features: 
 
 - [x] current apparent temp, 
-- [ ] current apparent temp as statusbar icon
+- [x] current apparent temp as statusbar icon
+- [ ] weather statusbar icons
 - [ ] weather range over the rest of the day (hidden in a menu)
 	- top item in teh submenu is conditional daily rain summary (☔️ or 🌂)
 - [x] today’s weather summary (ex ‘clear throughout the day’)
@@ -26,6 +27,7 @@
 - [ ] preference option to start app on boot (bool)
 - [ ] get/borrow/steal app store dev acct
 - [ ] marketing(what)/educational(why)/download(how) site (on gh-pages)
+	- design notes: draggable randomly laid out js, letters -> emoji for weather effects at scroll positions. easter egg mystery cat.
 	- has faqs section at the bottom, model it after the overcast site
 		- why not mac apps: culture of nondisposable, sustainable software/economy, apple neglect of the store (https://dancounsell.com/articles/not-on-the-mac-app-store)
 
