@@ -57,10 +57,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 
       menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApp.terminate(_:)), keyEquivalent: ""))
       updateLocationAndWeather()
+      NSTimer.every(1.hour, updateLocationAndWeather)
     }
   }
 
   func updateLocationAndWeather() {
+    print("updating weather!")
     self.locationManager.delegate = self
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
     self.locationManager.startUpdatingLocation()
