@@ -87,11 +87,25 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
         }
         // 🐈 set this to using temp in the statusitem
         if let statusItemButton = self.statusItem.button {
+          let statusbarItemIcon = currentForecast.currently?.icon!
+          print(statusbarItemIcon)
+          // If defined, this property will have one of the following values:
+          // Clear-day
+          // Clear-night
+          // Rain
+          // Snow
+          // Sleet
+          // Wind
+          // Fog
+          // Cloudy
+          // PartlyCloudyDay
+          // PartlyCloudyNight
+          // (weather-cat icon => Developers should ensure that a sensible default is defined, as additional values, such as hail, thunderstorm, or tornado, may be defined in the future.)
           statusItemButton.title = "\(apparentTemperature)°"
         }
 
         let weatherEmoji = self.weatherEmoji(currentForecast)
-        let summary = (currentForecast.daily?.data![0].summary)! as NSString
+        let summary = (currentForecast.daily?.data![0].summary)! as String
         let summaryMenuItem = self.menu.itemWithTag(self.summaryMenuItemTag)
         summaryMenuItem?.title = "\(weatherEmoji) \(summary)"
 
