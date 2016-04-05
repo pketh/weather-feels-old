@@ -12,7 +12,7 @@ let forecastIOClient = APIClient(apiKey: "480b791a0bd0965a07bc7b19c4b901e7")
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   // The appearance and behavior of the status item are then set using the button property
-  let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-2)
+  let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1)
   let locationManager = CLLocationManager()
   let menu = NSMenu()
 
@@ -24,9 +24,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   func applicationDidFinishLaunching(aNotification: NSNotification) {
     self.menu.autoenablesItems = false
     if let button = statusItem.button {
+      button.imagePosition = NSCellImagePosition.ImageLeft
       button.image = NSImage(named: "StatusBarButtonImage")
       button.title = "--°"
-      // button.action = #selector(AppDelegate.updateData(_:))
       statusItem.menu = menu
 
       let currentApparentTemperatureMenuItem = NSMenuItem(title: "--°", action: #selector(AppDelegate.openForecastInBrowser(_:)), keyEquivalent: "t")
