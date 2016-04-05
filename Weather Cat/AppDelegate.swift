@@ -164,7 +164,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
     let sunrise = currentForecast.daily?.data![0].sunriseTime as NSDate!
     let now = NSDate()
     var sunriseOrSunset = ""
-    if now < sunrise {
+    if now > sunset {
       let sunriseTime = "☀️ \(NSDateFormatter.localizedStringFromDate(sunrise!, dateStyle: NSDateFormatterStyle.NoStyle, timeStyle: NSDateFormatterStyle.ShortStyle))"
       sunriseOrSunset = sunriseTime
     } else {
