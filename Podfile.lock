@@ -1,13 +1,16 @@
 PODS:
   - ForecastIO (1.5.0)
   - SwiftDate (3.0.8)
+  - SwiftyTimer (1.3.1)
 
 DEPENDENCIES:
   - ForecastIO
   - SwiftDate
+  - SwiftyTimer
 
 SPEC CHECKSUMS:
   ForecastIO: b6b3e26e7134acf8a05388cc513a9e7eb18846b7
   SwiftDate: 971f8b9394f664f2226b9c3ab64e801a7291c612
+  SwiftyTimer: 50ad01c66721479709b41042e422ee852c185b13
 
 COCOAPODS: 0.39.0

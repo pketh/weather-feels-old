@@ -6,6 +6,7 @@ import Cocoa
 import CoreLocation
 
 import SwiftDate
+import SwiftyTimer
 import ForecastIO
 let forecastIOClient = APIClient(apiKey: "480b791a0bd0965a07bc7b19c4b901e7")
 
