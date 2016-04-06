@@ -7,8 +7,7 @@
 - [x] current apparent temp, 
 - [x] current apparent temp as statusbar icon
 - [ ] weather statusbar icons
-- [ ] weather range over the rest of the day (hidden in a menu)
-	- top item in teh submenu is conditional daily rain summary (☔️ or 🌂)
+- [x] weather range over the rest of the day (hidden in a menu)
 - [x] today’s weather summary (ex ‘clear throughout the day’)
 - [x] today’s sunset time
 - [x] emojis to represent recommended clothes (pants, bikinis etc.)
