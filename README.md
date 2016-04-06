@@ -21,7 +21,8 @@
 		- 🌂 for less chance 
 - [x] weather alerts
 - [x] sunset icon uses correct moonphase emoji icon 🌖🌗🌘🌒 etc
-- [ ] weather autoupdates (hourly)
+- [x] weather autoupdates (hourly)
+- [ ] remember location option pref so the app doesn't have to keep asking.
 - [ ] obfuscate/gitignore/change forecast api key
 - [x] show sunrise or sunset(`sunRiseOrSet`) , depending on what's upcoming (ie: show sunrise after the sun has set, and vice versa)
 - [ ] preference option to start app on boot (bool)

@@ -18,7 +18,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   let menu = NSMenu()
 
   let currentApparentTemperatureMenuItemTag = 1
-  let summaryMenuItemTag = 2
+  let summarySubenuItemTag = 2
   let sunriseOrSunsetTimeMenuItemTag = 3
   let alertMenuItemTag = 4
 
@@ -35,16 +35,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
       menu.addItem(currentApparentTemperatureMenuItem)
 
       // 🐈 todo: becomes a submenu w hourly updates list
-//      let summaryMenuItem = NSMenuItem(title: "🔮🌈 -----", action: nil, keyEquivalent: "")
-//      summaryMenuItem.tag = summaryMenuItemTag
-//      menu.addItem(summaryMenuItem)
+//      let summarySubenuItem = NSMenuItem(title: "🔮🌈 -----", action: nil, keyEquivalent: "")
+//      summarySubenuItem.tag = summarySubenuItemTag
+//      menu.addItem(summarySubenuItem)
 
 
       // test menu
       let submenu = NSMenu()
-      if let summaryMenuItem = menu.addItemWithTitle("🔮🌈 -----", action: nil, keyEquivalent: "") {
-        summaryMenuItem.tag = summaryMenuItemTag
-        menu.setSubmenu(submenu, forItem: summaryMenuItem)
+      if let summarySubenuItem = menu.addItemWithTitle("🔮🌈 -----", action: nil, keyEquivalent: "") {
+        summarySubenuItem.tag = summarySubenuItemTag
+        menu.setSubmenu(submenu, forItem: summarySubenuItem)
 //        let item2 = submenu.addItemWithTitle("sup", action: nil, keyEquivalent: "") {
 //        submenu.addItem(item2!)
       }
@@ -128,8 +128,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 
         let clothingEmoji = self.clothingEmoji(currentForecast)
         let summary = (currentForecast.daily?.data![0].summary)! as String
-        let summaryMenuItem = self.menu.itemWithTag(self.summaryMenuItemTag)
-        summaryMenuItem?.title = "\(clothingEmoji) \(summary)"
+        let summarySubenuItem = self.menu.itemWithTag(self.summarySubenuItemTag)
+        summarySubenuItem?.title = "\(clothingEmoji) \(summary)"
 
         // 🐈 todo: submenu
         //        print(currentForecast.hourly) "4pm 54F - 60F", etc
