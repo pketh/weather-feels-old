@@ -100,8 +100,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 
         let weatherUnit = self.localWeatherUnit(currentForecast)
         let windEmoji = self.windEmoji(currentForecast)
+        let precipEmoji = self.getPrecipWeatherEmoji(currentForecast)
+
         if let currentApparentTemperatureMenuItem = self.menu.itemWithTag(self.currentApparentTemperatureMenuItemTag) {
-          currentApparentTemperatureMenuItem.title = "\(apparentTemperature)°\(weatherUnit) \(windEmoji)"
+          currentApparentTemperatureMenuItem.title = "\(precipEmoji)\(windEmoji) \(apparentTemperature)°\(weatherUnit)"
           currentApparentTemperatureMenuItem.representedObject = "\(latitude),\(longitude)"
         }
         // 🐈 set this to using temp in the statusitem
@@ -124,10 +126,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
           statusItemButton.title = "\(apparentTemperature)°"
         }
 
-        let weatherEmoji = self.weatherEmoji(currentForecast)
+        let clothingEmoji = self.clothingEmoji(currentForecast)
         let summary = (currentForecast.daily?.data![0].summary)! as String
         let summaryMenuItem = self.menu.itemWithTag(self.summaryMenuItemTag)
-        summaryMenuItem?.title = "\(weatherEmoji) \(summary)"
+        summaryMenuItem?.title = "\(clothingEmoji) \(summary)"
 
         // 🐈 todo: submenu
         //        print(currentForecast.hourly) "4pm 54F - 60F", etc
@@ -152,20 +154,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
     }
   }
 
-  func weatherEmoji(currentForecast: Forecast) -> String {
-    let precipEmoji = getPrecipWeatherEmoji(currentForecast)
+  func clothingEmoji(currentForecast: Forecast) -> String {
     let apparentTemperature = Int(round((currentForecast.currently?.apparentTemperature)!))
     let warm = 70
     let cool = 50
-    var weatherEmoji = ""
+    var clothingEmoji = ""
     if apparentTemperature >= warm {
-      weatherEmoji = "👙👟"
+      clothingEmoji = "👙👟"
     } else if apparentTemperature < warm && apparentTemperature >= cool {
-      weatherEmoji = "👕👗"
+      clothingEmoji = "👕👗"
     } else {
-      weatherEmoji = "👖👘"
+      clothingEmoji = "👖👘"
     }
-    return "\(precipEmoji)\(weatherEmoji)"
+    return "\(clothingEmoji)"
   }
 
   func getPrecipWeatherEmoji(currentForecast: Forecast) -> String {
