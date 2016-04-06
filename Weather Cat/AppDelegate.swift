@@ -35,11 +35,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
       menu.addItem(currentApparentTemperatureMenuItem)
 
       // 🐈 todo: becomes a submenu w hourly updates list
-      let summaryMenuItem = NSMenuItem(title: "🔮🌈 -----", action: Selector(), keyEquivalent: "")
+      let summaryMenuItem = NSMenuItem(title: "🔮🌈 -----", action: nil, keyEquivalent: "")
       summaryMenuItem.tag = summaryMenuItemTag
       menu.addItem(summaryMenuItem)
 
-      let sunriseOrSunsetTimeMenuItem = NSMenuItem(title: "🌙 --:--", action: Selector(), keyEquivalent: "")
+      let sunriseOrSunsetTimeMenuItem = NSMenuItem(title: "🌙 --:--", action: nil, keyEquivalent: "")
       sunriseOrSunsetTimeMenuItem.tag = sunriseOrSunsetTimeMenuItemTag
       sunriseOrSunsetTimeMenuItem.enabled = false
       menu.addItem(sunriseOrSunsetTimeMenuItem)
@@ -61,8 +61,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
     }
   }
 
+
   func updateLocationAndWeather() {
-    print("updating weather!")
     self.locationManager.delegate = self
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
     self.locationManager.startUpdatingLocation()
@@ -84,17 +84,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
         let apparentTemperature = Int(round((currentForecast.currently?.apparentTemperature)!))
 
         let weatherUnit = self.localWeatherUnit(currentForecast)
+        let windEmoji = self.windEmoji(currentForecast)
         if let currentApparentTemperatureMenuItem = self.menu.itemWithTag(self.currentApparentTemperatureMenuItemTag) {
-          currentApparentTemperatureMenuItem.title = "\(apparentTemperature)°\(weatherUnit)"
+          currentApparentTemperatureMenuItem.title = "\(apparentTemperature)°\(weatherUnit) \(windEmoji)"
           currentApparentTemperatureMenuItem.representedObject = "\(latitude),\(longitude)"
         }
         // 🐈 set this to using temp in the statusitem
         if let statusItemButton = self.statusItem.button {
-          let statusbarItemIcon = currentForecast.currently?.icon!
+          let statusbarItemIcon = currentForecast.currently!.icon!
           print(statusbarItemIcon)
           // If defined, this property will have one of the following values:
-          // Clear-day
-          // Clear-night
+          // 32 x 32 (only need an @2x version).png
+          // ClearDay
+          // ClearNight
           // Rain
           // Snow
           // Sleet
@@ -125,6 +127,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   }
 
 //MARK: - Forecast Methods
+
+  func windEmoji(currentForecast: Forecast) -> String {
+    let windSpeed = currentForecast.currently?.windSpeed
+    if windSpeed > 20 {
+      return "💨"
+    } else {
+      return ""
+    }
+  }
 
   func weatherEmoji(currentForecast: Forecast) -> String {
     let precipEmoji = getPrecipWeatherEmoji(currentForecast)
