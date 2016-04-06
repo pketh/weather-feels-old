@@ -17,9 +17,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1)
   let locationManager = CLLocationManager()
   let menu = NSMenu()
+  let submenu = NSMenu()
 
   let currentApparentTemperatureMenuItemTag = 1
-  let summarySubenuItemTag = 2
+  let summarySubmenuItemTag = 2
   let sunriseOrSunsetTimeMenuItemTag = 3
   let alertMenuItemTag = 4
 
@@ -35,22 +36,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
       currentApparentTemperatureMenuItem.tag = currentApparentTemperatureMenuItemTag
       menu.addItem(currentApparentTemperatureMenuItem)
 
-      // 🐈 todo: becomes a submenu w hourly updates list
-//      let summarySubenuItem = NSMenuItem(title: "🔮🌈 -----", action: nil, keyEquivalent: "")
-//      summarySubenuItem.tag = summarySubenuItemTag
-//      menu.addItem(summarySubenuItem)
-
-
-      // test menu
-      let submenu = NSMenu()
-      if let summarySubenuItem = menu.addItemWithTitle("🔮🌈 -----", action: nil, keyEquivalent: "") {
-        summarySubenuItem.tag = summarySubenuItemTag
-        menu.setSubmenu(submenu, forItem: summarySubenuItem)
-//        let item2 = submenu.addItemWithTitle("sup", action: nil, keyEquivalent: "") {
-//        submenu.addItem(item2!)
+      if let summarySubmenuItem = menu.addItemWithTitle("🔮🌈 -----", action: nil, keyEquivalent: "") {
+        summarySubmenuItem.tag = summarySubmenuItemTag
+        menu.setSubmenu(submenu, forItem: summarySubmenuItem)
       }
-      ////////////
-
 
       let sunriseOrSunsetTimeMenuItem = NSMenuItem(title: "🌙 --:--", action: nil, keyEquivalent: "")
       sunriseOrSunsetTimeMenuItem.tag = sunriseOrSunsetTimeMenuItemTag
@@ -71,10 +60,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
       menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApp.terminate(_:)), keyEquivalent: ""))
       updateLocationAndWeather()
       NSTimer.every(1.hour, updateLocationAndWeather)
-
-
-
-      
     }
   }
 
@@ -107,10 +92,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
           currentApparentTemperatureMenuItem.title = "\(precipEmoji)\(windEmoji) \(apparentTemperature)°\(weatherUnit)"
           currentApparentTemperatureMenuItem.representedObject = "\(latitude),\(longitude)"
         }
-        // 🐈 set this to using temp in the statusitem
+        // 🐈 set this to using temp icon in the statusitem
         if let statusItemButton = self.statusItem.button {
           let statusbarItemIcon = currentForecast.currently!.icon!
           print(statusbarItemIcon)
+//          if let button = self.statusItem.button {
+//            button.image = NSImage(named: "StatusBarButtonImage")
+//          }
           // If defined, this property will have one of the following values:
           // 32 x 32 (only need an @2x version).png
           // ClearDay
@@ -129,12 +117,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 
         let clothingEmoji = self.clothingEmoji(currentForecast)
         let summary = (currentForecast.daily?.data![0].summary)! as String
-        let summarySubenuItem = self.menu.itemWithTag(self.summarySubenuItemTag)
-        summarySubenuItem?.title = "\(clothingEmoji) \(summary)"
+        let summarySubmenuItem = self.menu.itemWithTag(self.summarySubmenuItemTag)
+        summarySubmenuItem?.title = "\(clothingEmoji) \(summary)"
 
-        // 🐈 todo: submenu
         self.hourlyForecast(currentForecast)
-        print(self.hourlyForecast(currentForecast))
 
         self.updateSunriseOrSunsetTime(currentForecast)
 
@@ -147,12 +133,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 
 //MARK: - Forecast Methods
 
-  func hourlyForecast(currentForecast: Forecast) -> Array<String> {
-    let upcomingHours = 10
+  func hourlyForecast(currentForecast: Forecast) {
+    let upcomingHours = 12
     let now = NSDate()
     let hourlyForecasts = currentForecast.hourly!.data! as Array
     let hourlyForecastsSplit = $.chunk(hourlyForecasts, size: upcomingHours) as Array
-    var hourlyForcastOutput = [] as Array<String>
     for hourForecast in hourlyForecastsSplit[0] {
       if now < hourForecast.time {
         let hour = self.hourFormatter(hourForecast.time.hour)
@@ -160,10 +145,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
         let precipProbability = hourForecast.precipProbability as Float!
         let precipIntensity = hourForecast.precipIntensity as Float!
         let weatherEmoji = getPrecipWeatherEmoji(precipProbability, precipIntensity: precipIntensity)
-        hourlyForcastOutput.append("\(hour) - \(apparentTemperature)° \(weatherEmoji)")
+        submenu.addItemWithTitle("\(apparentTemperature)° \(weatherEmoji) - \(hour)", action: nil, keyEquivalent: "")
       }
     }
-    return(hourlyForcastOutput)
   }
 
   func hourFormatter(hour: Int) -> String {
