@@ -35,9 +35,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
       menu.addItem(currentApparentTemperatureMenuItem)
 
       // 🐈 todo: becomes a submenu w hourly updates list
-      let summaryMenuItem = NSMenuItem(title: "🔮🌈 -----", action: nil, keyEquivalent: "")
-      summaryMenuItem.tag = summaryMenuItemTag
-      menu.addItem(summaryMenuItem)
+//      let summaryMenuItem = NSMenuItem(title: "🔮🌈 -----", action: nil, keyEquivalent: "")
+//      summaryMenuItem.tag = summaryMenuItemTag
+//      menu.addItem(summaryMenuItem)
+
+
+      // test menu
+      let submenu = NSMenu()
+      if let summaryMenuItem = menu.addItemWithTitle("🔮🌈 -----", action: nil, keyEquivalent: "") {
+        summaryMenuItem.tag = summaryMenuItemTag
+        menu.setSubmenu(submenu, forItem: summaryMenuItem)
+//        let item2 = submenu.addItemWithTitle("sup", action: nil, keyEquivalent: "") {
+//        submenu.addItem(item2!)
+      }
+      ////////////
+
 
       let sunriseOrSunsetTimeMenuItem = NSMenuItem(title: "🌙 --:--", action: nil, keyEquivalent: "")
       sunriseOrSunsetTimeMenuItem.tag = sunriseOrSunsetTimeMenuItemTag
@@ -60,14 +72,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
       NSTimer.every(1.hour, updateLocationAndWeather)
 
 
-
-      let submenu = NSMenu()
-      if let item = menu.addItemWithTitle("hello", action: nil, keyEquivalent: "") {
-        menu.setSubmenu(submenu, forItem: item)
-        if let item2 = submenu.addItemWithTitle("sup", action: nil, keyEquivalent: "") {
-          submenu.addItem(item2)
-        }
-      }
 
       
     }
