@@ -58,9 +58,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
       menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApp.terminate(_:)), keyEquivalent: ""))
       updateLocationAndWeather()
       NSTimer.every(1.hour, updateLocationAndWeather)
+
+
+
+      let submenu = NSMenu()
+      if let item = menu.addItemWithTitle("hello", action: nil, keyEquivalent: "") {
+        menu.setSubmenu(submenu, forItem: item)
+        if let item2 = submenu.addItemWithTitle("sup", action: nil, keyEquivalent: "") {
+          submenu.addItem(item2)
+        }
+      }
+
+      
     }
   }
-
 
   func updateLocationAndWeather() {
     self.locationManager.delegate = self
