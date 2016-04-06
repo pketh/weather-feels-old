@@ -7,6 +7,7 @@ import CoreLocation
 
 import SwiftDate
 import SwiftyTimer
+import Dollar
 import ForecastIO
 let forecastIOClient = APIClient(apiKey: "480b791a0bd0965a07bc7b19c4b901e7")
 
@@ -100,7 +101,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 
         let weatherUnit = self.localWeatherUnit(currentForecast)
         let windEmoji = self.windEmoji(currentForecast)
-        let precipEmoji = self.getPrecipWeatherEmoji(currentForecast)
+        let precipEmoji = self.getCurrentPrecipWeather(currentForecast)
 
         if let currentApparentTemperatureMenuItem = self.menu.itemWithTag(self.currentApparentTemperatureMenuItemTag) {
           currentApparentTemperatureMenuItem.title = "\(precipEmoji)\(windEmoji) \(apparentTemperature)°\(weatherUnit)"
@@ -132,8 +133,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
         summarySubenuItem?.title = "\(clothingEmoji) \(summary)"
 
         // 🐈 todo: submenu
-        //        print(currentForecast.hourly) "4pm 54F - 60F", etc
-        // w weatherunit
+        self.hourlyForecast(currentForecast)
+        print(self.hourlyForecast(currentForecast))
+
         self.updateSunriseOrSunsetTime(currentForecast)
 
         self.updateWeatherAlerts(currentForecast)
@@ -144,6 +146,33 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   }
 
 //MARK: - Forecast Methods
+
+  func hourlyForecast(currentForecast: Forecast) -> Array<String> {
+    let upcomingHours = 10
+    let now = NSDate()
+    let hourlyForecasts = currentForecast.hourly!.data! as Array
+    let hourlyForecastsSplit = $.chunk(hourlyForecasts, size: upcomingHours) as Array
+    var hourlyForcastOutput = [] as Array<String>
+    for hourForecast in hourlyForecastsSplit[0] {
+      if now < hourForecast.time {
+        let hour = self.hourFormatter(hourForecast.time.hour)
+        let apparentTemperature = Int(round((hourForecast.apparentTemperature)!))
+        let precipProbability = hourForecast.precipProbability as Float!
+        let precipIntensity = hourForecast.precipIntensity as Float!
+        let weatherEmoji = getPrecipWeatherEmoji(precipProbability, precipIntensity: precipIntensity)
+        hourlyForcastOutput.append("\(hour) - \(apparentTemperature)° \(weatherEmoji)")
+      }
+    }
+    return(hourlyForcastOutput)
+  }
+
+  func hourFormatter(hour: Int) -> String {
+    if hour < 12 {
+      return "\(hour)AM"
+    } else {
+      return "\(hour-12)PM"
+    }
+  }
 
   func windEmoji(currentForecast: Forecast) -> String {
     let windSpeed = currentForecast.currently?.windSpeed
@@ -169,13 +198,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
     return "\(clothingEmoji)"
   }
 
-  func getPrecipWeatherEmoji(currentForecast: Forecast) -> String {
+  func getCurrentPrecipWeather(currentForecast: Forecast) -> String {
     let precipProbability = currentForecast.daily?.data![0].precipProbability as Float!
-    // print(precipProbability)
+    let precipIntensity = currentForecast.daily?.data![0].precipIntensity as Float!
+    return self.getPrecipWeatherEmoji(precipProbability, precipIntensity: precipIntensity)
+  }
+
+  func getPrecipWeatherEmoji(precipProbability: Float, precipIntensity: Float) -> String {
     let highPrecipProbability = 0.6 as Float
     let lowPrecipProbability = 0.2 as Float
-    let precipIntensity = currentForecast.daily?.data![0].precipIntensity as Float!
-    // print(precipIntensity)
     let moderatePrecipIntensity = 0.05 as Float
     // 0.017 in./hr. corresponds to light precipitation, 0.1 in./hr. corresponds to moderate precipitation, and 0.4 in./hr. corresponds to heavy precipitation.
     var precipEmoji = ""

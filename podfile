@@ -1,7 +1,9 @@
 source 'https://github.com/CocoaPods/Specs.git'
 platform :osx, '10.10'
-use_frameworks!
 
 pod "ForecastIO"
 pod "SwiftDate"
 pod "SwiftyTimer"
+pod "Dollar"
+
+use_frameworks!
