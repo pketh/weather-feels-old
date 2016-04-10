@@ -6,7 +6,7 @@
 
 - [x] current apparent temp, 
 - [x] current apparent temp as statusbar icon
-- [ ] weather statusbar icons
+- [x] weather statusbar icons
 - [x] weather range over the rest of the day (hidden in a menu)
 - [x] today’s weather summary (ex ‘clear throughout the day’)
 - [x] today’s sunset time

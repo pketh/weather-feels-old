@@ -29,7 +29,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
     if let button = statusItem.button {
       // STATUS BAR ITEM
       button.imagePosition = NSCellImagePosition.ImageLeft
-      button.image = NSImage(named: "StatusBarButtonImage")
+      button.image = NSImage(named: "Default") // todo make default based on app icon
       button.title = "--°"
       statusItem.menu = menu
 
@@ -84,48 +84,30 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
     forecastIOClient.units = .Auto
     forecastIOClient.getForecast(latitude: latitude, longitude: longitude) { (currentForecast, error) -> Void in
       if let currentForecast = currentForecast {
-        let apparentTemperature = Int(round((currentForecast.currently?.apparentTemperature)!))
+        let apparentTemperature = Int(round((currentForecast.currently?.apparentTemperature)!)) as Int
+        let weatherUnit = self.localWeatherUnit(currentForecast) as String
+        let windEmoji = self.windEmoji(currentForecast) as String
+        let precipEmoji = self.getCurrentPrecipWeather(currentForecast) as String
+        let clothingEmoji = self.clothingEmoji(currentForecast) as String
+        let summary = (currentForecast.daily?.data![0].summary)! as String
+        let summarySubmenuItem = self.menu.itemWithTag(self.summarySubmenuItemTag)
 
-        let weatherUnit = self.localWeatherUnit(currentForecast)
-        let windEmoji = self.windEmoji(currentForecast)
-        let precipEmoji = self.getCurrentPrecipWeather(currentForecast)
+        // SET STATUS ITEM
+        if let statusItemButton = self.statusItem.button {
+          let statusbarItemIcon = currentForecast.currently!.icon!
+          // print(statusbarItemIcon)
+          statusItemButton.image = NSImage(named: "\(statusbarItemIcon)")
+          statusItemButton.title = "\(apparentTemperature)°"
+        }
 
+        // SET MENU ITEMS
         if let currentApparentTemperatureMenuItem = self.menu.itemWithTag(self.currentApparentTemperatureMenuItemTag) {
           currentApparentTemperatureMenuItem.title = "\(precipEmoji)\(windEmoji) \(apparentTemperature)°\(weatherUnit)"
           currentApparentTemperatureMenuItem.representedObject = "\(latitude),\(longitude)"
         }
-        // 🐈 set this to using temp icon in the statusitem
-        if let statusItemButton = self.statusItem.button {
-          let statusbarItemIcon = currentForecast.currently!.icon!
-          print(statusbarItemIcon)
-//          if let button = self.statusItem.button {
-//            button.image = NSImage(named: "StatusBarButtonImage")
-//          }
-          // If defined, this property will have one of the following values:
-          // 32 x 32 (only need an @2x version).png?
-          // ClearDay
-          // ClearNight
-          // Rain
-          // Snow
-          // Sleet
-          // Wind
-          // Fog
-          // Cloudy
-          // PartlyCloudyDay
-          // PartlyCloudyNight
-          // (weather-cat icon => Developers should ensure that a sensible default is defined, as additional values, such as hail, thunderstorm, or tornado, may be defined in the future.)
-          statusItemButton.title = "\(apparentTemperature)°"
-        }
-
-        let clothingEmoji = self.clothingEmoji(currentForecast)
-        let summary = (currentForecast.daily?.data![0].summary)! as String
-        let summarySubmenuItem = self.menu.itemWithTag(self.summarySubmenuItemTag)
         summarySubmenuItem?.title = "\(clothingEmoji) \(summary)"
-
         self.hourlyForecast(currentForecast)
-
         self.updateSunriseOrSunsetTime(currentForecast)
-
         self.updateWeatherAlerts(currentForecast)
       } else if let error = error {
         print(error)
@@ -136,6 +118,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 //MARK: - Forecast Methods
 
   func hourlyForecast(currentForecast: Forecast) {
+    submenu.removeAllItems()
     let upcomingHours = 12
     let now = NSDate()
     let hourlyForecasts = currentForecast.hourly!.data! as Array
