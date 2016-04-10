@@ -43,6 +43,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
         menu.setSubmenu(submenu, forItem: summarySubmenuItem)
       }
 
+      // this prob needs to be updated inside the update func
       let sunriseOrSunsetTimeMenuItem = NSMenuItem(title: "🌙 --:--", action: nil, keyEquivalent: "")
       sunriseOrSunsetTimeMenuItem.tag = sunriseOrSunsetTimeMenuItemTag
       sunriseOrSunsetTimeMenuItem.enabled = false
@@ -78,6 +79,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
     locationManager.stopUpdatingLocation() // Stop Location Manager - keep here to run just once -> ⛄️ update daily
     updateWeather(latitude, longitude: longitude)
   }
+
+
+  //MARK: - Forecast Methods
 
   func updateWeather(latitude: Double, longitude: Double) {
     // print("location is latitude \(latitude), longitude \(longitude)")
@@ -115,31 +119,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
     }
   }
 
-//MARK: - Forecast Methods
-
   func hourlyForecast(currentForecast: Forecast) {
-    submenu.removeAllItems()
     let upcomingHours = 12
     let now = NSDate()
     let hourlyForecasts = currentForecast.hourly!.data! as Array
     let hourlyForecastsSplit = $.chunk(hourlyForecasts, size: upcomingHours) as Array
+    submenu.removeAllItems()
+    submenu.addItemWithTitle("Next \(upcomingHours) hours:", action: nil, keyEquivalent: "")
+    // ----------------
+    submenu.addItem(NSMenuItem.separatorItem())
     for hourForecast in hourlyForecastsSplit[0] {
       if now < hourForecast.time {
-        let hour = self.hourFormatter(hourForecast.time.hour)
         let apparentTemperature = Int(round((hourForecast.apparentTemperature)!))
         let precipProbability = hourForecast.precipProbability as Float!
         let precipIntensity = hourForecast.precipIntensity as Float!
         let weatherEmoji = getPrecipWeatherEmoji(precipProbability, precipIntensity: precipIntensity)
-        submenu.addItemWithTitle("\(apparentTemperature)° \(weatherEmoji) - \(hour)", action: nil, keyEquivalent: "")
+        submenu.addItemWithTitle("\(apparentTemperature)° \(weatherEmoji)", action: nil, keyEquivalent: "")
       }
-    }
-  }
-
-  func hourFormatter(hour: Int) -> String {
-    if hour < 12 {
-      return "\(hour)AM"
-    } else {
-      return "\(hour-12)PM"
     }
   }
 
