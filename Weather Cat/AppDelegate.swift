@@ -9,10 +9,10 @@ import SwiftDate
 import SwiftyTimer
 import Dollar
 import ForecastIO
-let forecastIOClient = APIClient(apiKey: "480b791a0bd0965a07bc7b19c4b901e7")
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
+  let forecastIOClient = APIClient(apiKey: forecastAPIKey)
   let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1)
   let locationManager = CLLocationManager()
   let menu = NSMenu()
