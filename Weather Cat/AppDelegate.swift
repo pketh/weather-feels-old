@@ -13,12 +13,12 @@ let forecastIOClient = APIClient(apiKey: "480b791a0bd0965a07bc7b19c4b901e7")
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
-  // The appearance and behavior of the status item are then set using the button property
   let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1)
   let locationManager = CLLocationManager()
   let menu = NSMenu()
   let submenu = NSMenu()
 
+  // TAGS:
   let currentApparentTemperatureMenuItemTag = 1
   let summarySubmenuItemTag = 2
   let sunriseOrSunsetTimeMenuItemTag = 3
@@ -27,11 +27,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
   func applicationDidFinishLaunching(aNotification: NSNotification) {
     self.menu.autoenablesItems = false
     if let button = statusItem.button {
+      // STATUS BAR ITEM
       button.imagePosition = NSCellImagePosition.ImageLeft
       button.image = NSImage(named: "StatusBarButtonImage")
       button.title = "--°"
       statusItem.menu = menu
 
+      // MENU ITEMS
       let currentApparentTemperatureMenuItem = NSMenuItem(title: "--°", action: #selector(AppDelegate.openForecastInBrowser(_:)), keyEquivalent: "t")
       currentApparentTemperatureMenuItem.tag = currentApparentTemperatureMenuItemTag
       menu.addItem(currentApparentTemperatureMenuItem)
@@ -100,7 +102,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 //            button.image = NSImage(named: "StatusBarButtonImage")
 //          }
           // If defined, this property will have one of the following values:
-          // 32 x 32 (only need an @2x version).png
+          // 32 x 32 (only need an @2x version).png?
           // ClearDay
           // ClearNight
           // Rain
