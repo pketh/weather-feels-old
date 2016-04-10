@@ -21,6 +21,7 @@
 - [x] weather alerts
 - [x] sunset icon uses correct moonphase emoji icon 🌖🌗🌘🌒 etc
 - [x] weather autoupdates (hourly)
+- [ ] i think the sunrise or sunset logic is still broken (tested at 2am, saw sunset string. expected sunrise)
 - [ ] remember location option pref so the app doesn't have to keep asking.
 - [ ] obfuscate/gitignore/change forecast api key
 - [x] show sunrise or sunset(`sunRiseOrSet`) , depending on what's upcoming (ie: show sunrise after the sun has set, and vice versa)
@@ -36,7 +37,7 @@
 http://mattgemmell.com/releasing-outside-the-app-store/
 
 - [ ] updator? sparkle? app store?
-- [x] do I HAVE to have an dev certificate/pay 100$? (yup)
+- [x] do I HAVE to have an dev certificate/pay 100$ until I die?
 
 
 ## v2 
@@ -46,3 +47,5 @@ http://mattgemmell.com/releasing-outside-the-app-store/
 ## build and compile
 
 `pod install`
+
+edit using `Weather Cat.xcworkspace`
