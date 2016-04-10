@@ -23,10 +23,12 @@
 - [x] weather autoupdates (hourly)
 - [x] obfuscate/gitignore/change forecast api key
 - [x] show sunrise or sunset(`sunRiseOrSet`) , depending on what's upcoming (ie: show sunrise after the sun has set, and vice versa)
-- [ ] clean up formatting for submenu
+- [x] clean up formatting for submenu
 
 - [ ] i think the sunrise or sunset logic is still broken? (tested at 2am, saw sunset string. expected sunrise)
+
 - [ ] preference option to start app on boot (bool)
+
 - [ ] get/borrow/steal app store dev acct
 - [ ] marketing(what)/educational(why)/download(how) site (on gh-pages)
 	- design notes: draggable randomly laid out js, letters -> emoji for weather effects at scroll positions. easter egg mystery cat.
