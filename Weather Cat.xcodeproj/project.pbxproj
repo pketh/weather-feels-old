@@ -20,7 +20,7 @@
 		551CEAED1547D772FBE934EF /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D5F74F41CB156E300549C22 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		9D8656911CBAE544002089D2 /* Secrets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
-		9DB693E41CB0BB5E00DDE2EF /* Weather Feels.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Weather Feels.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9DB693E41CB0BB5E00DDE2EF /* Weather Cat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Weather Cat.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9DB693E71CB0BB5E00DDE2EF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9DB693E91CB0BB5E00DDE2EF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9DB693EC1CB0BB5E00DDE2EF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -53,7 +53,7 @@
 		9DB693DB1CB0BB5E00DDE2EF = {
 			isa = PBXGroup;
 			children = (
-				9DB693E61CB0BB5E00DDE2EF /* Weather Feels */,
+				9DB693E61CB0BB5E00DDE2EF /* Weather Cat */,
 				9DB693E51CB0BB5E00DDE2EF /* Products */,
 				E4DFDFE1348664DA1461276D /* Pods */,
 				49C9E85AA55A90DF90E41AE1 /* Frameworks */,
@@ -63,12 +63,12 @@
 		9DB693E51CB0BB5E00DDE2EF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9DB693E41CB0BB5E00DDE2EF /* Weather Feels.app */,
+				9DB693E41CB0BB5E00DDE2EF /* Weather Cat.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		9DB693E61CB0BB5E00DDE2EF /* Weather Feels */ = {
+		9DB693E61CB0BB5E00DDE2EF /* Weather Cat */ = {
 			isa = PBXGroup;
 			children = (
 				9DB693E71CB0BB5E00DDE2EF /* AppDelegate.swift */,
@@ -77,7 +77,6 @@
 				9DB693EB1CB0BB5E00DDE2EF /* MainMenu.xib */,
 				9DB693EE1CB0BB5E00DDE2EF /* Info.plist */,
 			);
-			name = "Weather Feels";
 			path = "Weather Cat";
 			sourceTree = "<group>";
 		};
@@ -93,9 +92,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		9DB693E31CB0BB5E00DDE2EF /* Weather Feels */ = {
+		9DB693E31CB0BB5E00DDE2EF /* Weather Cat */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9DB693F11CB0BB5E00DDE2EF /* Build configuration list for PBXNativeTarget "Weather Feels" */;
+			buildConfigurationList = 9DB693F11CB0BB5E00DDE2EF /* Build configuration list for PBXNativeTarget "Weather Cat" */;
 			buildPhases = (
 				FF5A43CC904189061E44236F /* Check Pods Manifest.lock */,
 				9DB693E01CB0BB5E00DDE2EF /* Sources */,
@@ -108,9 +107,9 @@
 			);
 			dependencies = (
 			);
-			name = "Weather Feels";
+			name = "Weather Cat";
 			productName = "Weather Cat";
-			productReference = 9DB693E41CB0BB5E00DDE2EF /* Weather Feels.app */;
+			productReference = 9DB693E41CB0BB5E00DDE2EF /* Weather Cat.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -128,7 +127,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 9DB693DF1CB0BB5E00DDE2EF /* Build configuration list for PBXProject "Weather Feels" */;
+			buildConfigurationList = 9DB693DF1CB0BB5E00DDE2EF /* Build configuration list for PBXProject "Weather Cat" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -141,7 +140,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9DB693E31CB0BB5E00DDE2EF /* Weather Feels */,
+				9DB693E31CB0BB5E00DDE2EF /* Weather Cat */,
 			);
 		};
 /* End PBXProject section */
@@ -322,8 +321,8 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "Weather Cat/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pirijan.Weather-Feels";
-				PRODUCT_NAME = "Weather Feels";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pirijan.Weather-Cat";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
 		};
@@ -335,15 +334,15 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "Weather Cat/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pirijan.Weather-Feels";
-				PRODUCT_NAME = "Weather Feels";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pirijan.Weather-Cat";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		9DB693DF1CB0BB5E00DDE2EF /* Build configuration list for PBXProject "Weather Feels" */ = {
+		9DB693DF1CB0BB5E00DDE2EF /* Build configuration list for PBXProject "Weather Cat" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9DB693EF1CB0BB5E00DDE2EF /* Debug */,
@@ -352,7 +351,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9DB693F11CB0BB5E00DDE2EF /* Build configuration list for PBXNativeTarget "Weather Feels" */ = {
+		9DB693F11CB0BB5E00DDE2EF /* Build configuration list for PBXNativeTarget "Weather Cat" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9DB693F21CB0BB5E00DDE2EF /* Debug */,
