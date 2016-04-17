@@ -27,7 +27,7 @@
 
 - [ ] i think the sunrise or sunset logic is still broken? (tested at 2am, saw sunset string. expected sunrise)
 
-- [ ] preference option to start app on boot (bool)
+- [ ] ask on first boot, after first successful forecast fetch (replaces prefs)
 
 - [ ] get/borrow/steal app store dev acct
 - [ ] marketing(what)/educational(why)/download(how) site (on gh-pages)
