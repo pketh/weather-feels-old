@@ -1,4 +1,6 @@
-# weather-cat
+# weather-feels
+
+temps in your menu bar
 
 ☀️☁️☔️⛄️💦🌈
 
