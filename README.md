@@ -26,12 +26,10 @@ temps in your menu bar
 - [x] obfuscate/gitignore/change forecast api key
 - [x] show sunrise or sunset(`sunRiseOrSet`) , depending on what's upcoming (ie: show sunrise after the sun has set, and vice versa)
 - [x] clean up formatting for submenu
+- [x] i think the sunrise or sunset logic is still broken? (tested at 2am, saw sunset string. expected sunrise)
 
-- [ ] i think the sunrise or sunset logic is still broken? (tested at 2am, saw sunset string. expected sunrise)
+- [ ] prefs window (refresh location, switch units)
 
-- [ ] ask on first boot, after first successful forecast fetch (replaces prefs)
-
-- [ ] get/borrow/steal app store dev acct
 - [ ] marketing(what)/educational(why)/download(how) site (on gh-pages)
 	- design notes: draggable randomly laid out js, letters -> emoji for weather effects at scroll positions. easter egg mystery cat.
 	- has faqs section at the bottom, model it after the overcast site
