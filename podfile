@@ -1,9 +1,14 @@
 source 'https://github.com/CocoaPods/Specs.git'
 platform :osx, '10.10'
+ 
+target 'Weather Cat' do
 
 pod "ForecastIO"
 pod "SwiftDate"
 pod "SwiftyTimer"
 pod "Dollar"
 
+
 use_frameworks!
+
+end
