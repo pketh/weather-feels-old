@@ -12,6 +12,10 @@ import ForecastIO
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
+  
+  let newWindow = NSWindow(contentRect: NSMakeRect(0, 0, NSScreen.mainScreen()!.frame.width/2, NSScreen.mainScreen()!.frame.height/2), styleMask: NSTitledWindowMask|NSResizableWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask, backing: NSBackingStoreType.Buffered, defer: false) // nicked from stack overflow, sry
+  
+  
   let forecastIOClient = APIClient(apiKey: forecastAPIKey)
   let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1)
   let locationManager = CLLocationManager()
@@ -59,6 +63,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
 
       // ----------------
       menu.addItem(NSMenuItem.separatorItem())
+      
+      
+      let aboutMenuItem = NSMenuItem(title: "About Weather Feels", action: #selector(openAboutWindow), keyEquivalent: "")
+      menu.addItem(aboutMenuItem)
+      
 
       menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApp.terminate(_:)), keyEquivalent: ""))
       updateLocationAndWeather()
@@ -79,6 +88,22 @@ class AppDelegate: NSObject, NSApplicationDelegate, CLLocationManagerDelegate {
     locationManager.stopUpdatingLocation() // Stop Location Manager - keep here to run just once -> ⛄️ update daily
     updateWeather(latitude, longitude: longitude)
   }
+  
+  //MARK: - About Window Handling
+  func createNewWindow(){
+    newWindow.title = "New Window"
+    newWindow.opaque = false
+    newWindow.center()
+    newWindow.movableByWindowBackground = true
+    newWindow.backgroundColor = NSColor(calibratedHue: 0, saturation: 1.0, brightness: 0, alpha: 0.7)
+    newWindow.makeKeyAndOrderFront(nil)
+  }
+  
+  func openAboutWindow() {
+    createNewWindow()
+  }
+  
+  // probably some delegate method here so it doesn't explode when you click on it a second time
 
 
   //MARK: - Forecast Methods
